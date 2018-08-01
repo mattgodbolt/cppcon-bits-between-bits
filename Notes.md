@@ -1,3 +1,6 @@
+The bits between the bits
+--------------------
+
 When you run your C++ code, have you ever considered how the  linker, loader, operating system, C and C++ runtime all work so hard to get everything set up for you to start running your code in main()?
 
 In this Linux-focused talk, Matt will talk about how the linker stitches together your code and how that fits in with dynamic linking. He'll touch on debugging issues with the loader, and how ODR violations can manifest themselves. Then he'll take a look at what's going on behind the scenes to get the C runtime up, and then the C++ runtime, along with all the global object constructors - showing more reasons why you shouldn't be using them!
