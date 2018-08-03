@@ -1,4 +1,4 @@
-Slides for C++ isn't dead
+The Bits Between the Bits
 --------------------
 
-A talk I gave at [Avast](https://www.avast.com/) in June 2018. Forked from a GOTO talk I did in April.
+A CppCon 2018 talk.
