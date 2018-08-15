@@ -3,25 +3,42 @@ CXX:=/opt/compiler-explorer/gcc-8.1.0/bin/g++
 CFLAGS=-Os -g
 CXXFLAGS=-Os -g
 
-all: out/hello_c out/hello_cpp out/hello_c_static out/hello_cpp_static
+default: all 
+define ADD_C =
+out/$(2)/$(1)_c.o: $(1)_c.c Makefile
+	@mkdir -p $$(dir $$@)
+	$(CC) -c -o $$@ $$< $(CFLAGS) $(3)
+out/$(2)/$(1)_c: out/$(2)/$(1)_c.o Makefile
+	@mkdir -p $$(dir $$@)
+	$(CC) -o $$@ $$< $(CFLAGS) $(3)
+ALL_TARGETS += out/$(2)/$(1)_c
+endef
 
-out/hello_c.o: hello_c.c Makefile
-	mkdir -p out
-	$(CC) -c -o $@ $< $(CFLAGS)
+define ADD_CXX =
+out/$(2)/$(1)_cpp.o: $(1)_cpp.cpp Makefile
+	@mkdir -p $(dir $$@)
+	$(CXX) -c -o $$@ $$< $(CXXFLAGS) $(3)
+out/$(2)/$(1)_cpp: out/$(2)/$(1)_cpp.o Makefile
+	@mkdir -p $(dir $$@)
+	$(CXX) -o $$@ $$< $(CXXFLAGS) $(3)
+ALL_TARGETS += out/$(2)/$(1)_cpp
+endef
 
-out/hello_c: out/hello_c.o
-out/hello_cpp: hello_cpp.cpp Makefile
-	mkdir -p out
-	$(CXX) -o $@ $< $(CFLAGS)
+define ADD =
+$(call ADD_C,$(1),$(2)/static,-static $(3))
+$(call ADD_CXX,$(1),$(2)/static,-static $(3))
+$(call ADD_C,$(1),$(2)/dynamic,$(3))
+$(call ADD_CXX,$(1),$(2)/dynamic,$(3))
+endef
 
-out/hello_c_static: hello_c.c Makefile
-	mkdir -p out
-	$(CC) -o $@ $< $(CFLAGS) -static
-out/hello_cpp_static: hello_cpp.cpp Makefile
-	mkdir -p out
-	$(CXX) -o $@ $< $(CFLAGS) -static
+$(eval $(call ADD,hello,none,))
+$(eval $(call ADD,hello,lto,-flto))
+$(eval $(call ADD,hello,sections,-ffunction-sections -fdata-sections))
+$(eval $(call ADD,hello,sections,-ffunction-sections -fdata-sections))
 
-.PHONY: clean static
+all: $(ALL_TARGETS)
+
+.PHONY: clean all
 
 clean:
 	rm -rf out/
