@@ -62,7 +62,7 @@
             Overview
         </section>
         <section>
-            Example C program, static and non-static
+            Example C program, static and non-static (MAYBE ONLY NON-STATIC?)
             <ul>
                 <li>Why is it so large?</li>
                 <li>What's in it?</li>
@@ -78,7 +78,7 @@
                 <li>objdump -r (show reloc)</li>
                 <li>readelf? (needed later but for now maybe no?)</li>
             </ul>
-            sections, relocations
+            sections, relocations (TODO uses for it, hot/cold code and other magic)
             WEAK references (setup for ODR stuff?) - maybe introduce later with C++
         </section>
         <section>
@@ -98,25 +98,34 @@
             So far C, what about C++?
             simple template usage, show weak refs? (setup for ODR viol?)
         </section>
+        <section>
+            global constructors, destructors
+            - callgrind to main? wth is going on? poll on how many instructions for an empty executable
+        </section>
+        <section>
+            But what about dynamic linkage?
+            ld.so, interpreter
+            ELF file layout slide?
+        </section>
+        <section>
+            A new challenger enters: LTO!
+            - betterer, ODR violation finder
+        </section>
+        <section>
+            Practical advice
+            - `LD_DEBUG` and `LD_PRELOAD`
+        </section>
+        <section>
+            Behind the scenes: glo
+        </section>
         <!--
-        - Diversion to LTO? -- maybe much later
-        - system libraries (libc, libgcc etc)
-        - linker sections (-ffunction-sections, -fdata-sections, --gc-sections?)
-        - linker scripts
-        - Dynamic linking
-        - rough overview
-        - ELF format 101
-        - Dynamic library loading process
-        - Debugging it, `LD_DEBUG` (also `LD_PRELOAD`)
-        - ODR violations
-        - Global constructors
-        - special sections for these
-        - how they work
-        - Single stepping to main() ? run callgrind to see how many instructions get run?
         - War stories (if time)
         - exceptions thrown across SO boundaries
         - other ODR violations if I remember...
+        - Diversion to LTO? -- maybe much later
+        - linker sections (-ffunction-sections, -fdata-sections, --gc-sections?)
         - Using linker scripts/sections for fun and profit? (out of band metadata?)
+        - linker scripts
         -->
     </div>
 </div>
