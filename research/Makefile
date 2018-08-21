@@ -34,7 +34,6 @@ endef
 $(eval $(call ADD,hello,none,))
 $(eval $(call ADD,hello,lto,-flto))
 $(eval $(call ADD,hello,sections,-ffunction-sections -fdata-sections))
-$(eval $(call ADD,hello,sections,-ffunction-sections -fdata-sections))
 
 all: $(ALL_TARGETS)
 

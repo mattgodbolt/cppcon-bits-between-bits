@@ -151,3 +151,5 @@ Breakpoint 1, 0x0000000000402d90 in register_tm_clones ()
 ```
 
 - Google says that's transactional memory support! Neat...I guess...
+
+- Version scripts?!

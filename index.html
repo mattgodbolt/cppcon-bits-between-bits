@@ -49,12 +49,75 @@
     <div class="slides">
         <section>
             <h3>The Bits Between the Bits</h3>
-            <h5>Matt Godbolt<br><a href="https:/>/twitter.com/mattgodbolt">@mattgodbolt</a></h5>
-            <h5>CppCon 2018</h5>
+            <h4>How we get to <code>main()</code></h4>
+            <h6>Matt Godbolt<br><a href="https:/>/twitter.com/mattgodbolt">@mattgodbolt</a></h6>
+            <h6>CppCon 2018</h6>
         </section>
         <section>
-            <!-- TODO Ozric Tentacles? -->
+            Edit code / MAKE / run!
+            But what witchcraft happens between compiler and that?
+            Knowing why will help you understand... ODR violations, link times etc
         </section>
+        <section>
+            Overview
+        </section>
+        <section>
+            Example C program, static and non-static
+            <ul>
+                <li>Why is it so large?</li>
+                <li>What's in it?</li>
+            </ul>
+        </section>
+        <section>
+            C world!
+            .o files, tools to look at them
+            [maybe turn off debug symbols for this bit?]
+            <ul>
+                <li>nm (show T main and U puts)</li>
+                <li>objdump -d (show disassembly with call 0x00000)</li>
+                <li>objdump -r (show reloc)</li>
+                <li>readelf? (needed later but for now maybe no?)</li>
+            </ul>
+            sections, relocations
+            WEAK references (setup for ODR stuff?) - maybe introduce later with C++
+        </section>
+        <section>
+            Quick mention of .a files?
+        </section>
+        <section>
+            The linker! (ld, gold)
+            High level view of what it does
+            * gather sections together, resolve relocations (CHECK is it relocations?)
+        </section>
+        <section>
+            Finding libraries used (-v)
+            - dissect command line, look at -dumpspecs (doesn't have everything we'd need to look at)
+            start group, end group (library ordering matters)
+        </section>
+        <section>
+            So far C, what about C++?
+            simple template usage, show weak refs? (setup for ODR viol?)
+        </section>
+        <!--
+        - Diversion to LTO? -- maybe much later
+        - system libraries (libc, libgcc etc)
+        - linker sections (-ffunction-sections, -fdata-sections, --gc-sections?)
+        - linker scripts
+        - Dynamic linking
+        - rough overview
+        - ELF format 101
+        - Dynamic library loading process
+        - Debugging it, `LD_DEBUG` (also `LD_PRELOAD`)
+        - ODR violations
+        - Global constructors
+        - special sections for these
+        - how they work
+        - Single stepping to main() ? run callgrind to see how many instructions get run?
+        - War stories (if time)
+        - exceptions thrown across SO boundaries
+        - other ODR violations if I remember...
+        - Using linker scripts/sections for fun and profit? (out of band metadata?)
+        -->
     </div>
 </div>
 
