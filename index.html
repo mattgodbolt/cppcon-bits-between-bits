@@ -60,6 +60,7 @@
         </section>
         <section>
             Overview
+            linux only
         </section>
         <section>
             Example C program, static and non-static (MAYBE ONLY NON-STATIC?)
@@ -69,17 +70,21 @@
             </ul>
         </section>
         <section>
-            C world!
-            .o files, tools to look at them
-            [maybe turn off debug symbols for this bit?]
+            <p>C world!
+                .o files, tools to look at them
+                [maybe turn off debug symbols for this bit?]</p>
             <ul>
                 <li>nm (show T main and U puts)</li>
                 <li>objdump -d (show disassembly with call 0x00000)</li>
+                <li>Show that even symbols in the same file aren't resolved (tricky)</li>
                 <li>objdump -r (show reloc)</li>
+                <li>objdump -dr (show together)</li>
                 <li>readelf? (needed later but for now maybe no?)</li>
             </ul>
-            sections, relocations (TODO uses for it, hot/cold code and other magic)
-            WEAK references (setup for ODR stuff?) - maybe introduce later with C++
+            <p>
+                sections, relocations (TODO uses for it, hot/cold code and other magic)
+                WEAK references (setup for ODR stuff?) - maybe introduce later with C++
+            </p>
         </section>
         <section>
             Quick mention of .a files?
@@ -114,19 +119,27 @@
         <section>
             Practical advice
             - `LD_DEBUG` and `LD_PRELOAD`
+            - LTO usage?
+            -
         </section>
         <section>
-            Behind the scenes: glo
+            - linker sections (-ffunction-sections, -fdata-sections, --gc-sections?)
+            -
         </section>
-        <!--
-        - War stories (if time)
-        - exceptions thrown across SO boundaries
-        - other ODR violations if I remember...
-        - Diversion to LTO? -- maybe much later
-        - linker sections (-ffunction-sections, -fdata-sections, --gc-sections?)
-        - Using linker scripts/sections for fun and profit? (out of band metadata?)
-        - linker scripts
-        -->
+        <section>
+            <section>Bonus slides</section>
+            <section>
+                War stories
+                - exceptions thrown across SO bounadaries
+                - (global construction order issues?)
+            </section>
+            <section>
+                Advanced section-fu (putting sideband data in a section?)
+            </section>
+            <section>
+                Linker sctipts?
+            </section>
+        </section>
     </div>
 </div>
 

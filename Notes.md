@@ -40,6 +40,8 @@ linker, along with the relevant runtimes, and then loaded and executed by the op
 
 ## What do I want to teach?
 
+- What is the linker? What's its job and how does it achieve that.
+- Dynamic linking: how it works
 - Static and global initialisation is fraught with troubles. Explain and demonstrate why.
 - Intuition on how LTO works and how it might find new ODR violations you didn't know about.
 - Bonus: some diea how the OS loads and runs your program
@@ -47,7 +49,7 @@ linker, along with the relevant runtimes, and then loaded and executed by the op
 
 
 ## Raw notes
-makefiles...bulid stuff
+makefiles...build stuff
 * show objdump -D -x --full-contents ...
 * readelf -d ... shows `INIT` and `FINI` addresses amongst other things (dynamic)
   * readelf -a shows `.init` even in static, section name
@@ -153,3 +155,48 @@ Breakpoint 1, 0x0000000000402d90 in register_tm_clones ()
 - Google says that's transactional memory support! Neat...I guess...
 
 - Version scripts?!
+
+
+------------------
+
+- Building "hello" statically
+  - -Wl,--gc-sections drops it a bit (-Wl,--print-gc-sections shows how, but still has unused functions)
+- dynamically:
+  - 8248 bytes dynamic goes down to 8032 when dropping sections
+  - still has greet and getMessage (greet isn't inlined, getMessage is and isn't called)
+  - ... with function sections:
+    - 8280 native
+    - w gc sections: 7992, ```Removing unused section '.text.getMessage' in file 'out/hello/c/sections/dynamic/hello.o'```
+    - drawbacks (code locality?)
+    - (stripped goes to 6064)
+    - diffing readelf -a from both stripped and unstripped yields symbol table is the only thing lacking
+
+
+-----------------
+- debugging plt
+```asm
+(gdb) disassemble 
+Dump of assembler code for function puts@plt:
+=> 0x0000000000400406 <+6>:     pushq  $0x0
+   0x000000000040040b <+11>:    jmpq   0x4003f0
+End of assembler dump.
+(gdb) stepi
+0x000000000040040b in puts@plt ()
+0x00000000004003f0 in ?? ()
+(gdb) disassemble 
+No function contains program counter for selected frame.
+(gdb) bt
+#0  0x00000000004003f0 in ?? ()
+#1  0x0000000000400418 in main ()
+(gdb) disassemble 0x4003f0,+0x10
+Dump of assembler code from 0x4003f0 to 0x400400:
+=> 0x00000000004003f0:  pushq  0x200c12(%rip)        # 0x601008
+   0x00000000004003f6:  jmpq   *0x200c14(%rip)        # 0x601010
+   0x00000000004003fc:  nopl   0x0(%rax)
+End of assembler dump.
+(gdb) stepi
+0x00000000004003f6 in ?? ()
+_dl_runtime_resolve_xsavec () at ../sysdeps/x86_64/dl-trampoline.h:71
+(gdb) 
+```
+```

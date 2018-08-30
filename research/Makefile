@@ -1,39 +1,64 @@
 CC:=/opt/compiler-explorer/gcc-8.1.0/bin/gcc
 CXX:=/opt/compiler-explorer/gcc-8.1.0/bin/g++
-CFLAGS=-Os -g
-CXXFLAGS=-Os -g
+CFLAGS=-Os
+CXXFLAGS=-Os
+
+# Gotta love make...
+define NEWLINE =
+
+
+endef
+
+define ONE_C_O =
+out/$(1)/c/$(2)/$(4).o: $(4).c Makefile
+	@mkdir -p $$(dir $$@)
+	$(CC) -c -o $$@ $$< $(CFLAGS) $(3)
+endef
 
 default: all 
 define ADD_C =
-out/$(2)/$(1)_c.o: $(1)_c.c Makefile
+$(foreach OBJ,$(1) $(4),$(call ONE_C_O,$(1),$(2),$(3),$(OBJ))$(NEWLINE))
+out/$(1)/c/$(2)/$(1): $(foreach OBJ,$(1) $(4),out/$(1)/c/$(2)/$(OBJ).o) | Makefile
 	@mkdir -p $$(dir $$@)
-	$(CC) -c -o $$@ $$< $(CFLAGS) $(3)
-out/$(2)/$(1)_c: out/$(2)/$(1)_c.o Makefile
+	$(CC) -o $$@ $$^ $(CFLAGS) $(3)
+ALL_TARGETS += out/$(1)/c/$(2)/$(1)
+endef
+
+define ONE_CXX_O =
+out/$(1)/c++/$(2)/$(4).o: $(4).cpp Makefile
 	@mkdir -p $$(dir $$@)
-	$(CC) -o $$@ $$< $(CFLAGS) $(3)
-ALL_TARGETS += out/$(2)/$(1)_c
+	$(CXX) -c -o $$@ $$< $(CXXFLAGS) $(3)
 endef
 
 define ADD_CXX =
-out/$(2)/$(1)_cpp.o: $(1)_cpp.cpp Makefile
-	@mkdir -p $(dir $$@)
-	$(CXX) -c -o $$@ $$< $(CXXFLAGS) $(3)
-out/$(2)/$(1)_cpp: out/$(2)/$(1)_cpp.o Makefile
-	@mkdir -p $(dir $$@)
-	$(CXX) -o $$@ $$< $(CXXFLAGS) $(3)
-ALL_TARGETS += out/$(2)/$(1)_cpp
+$(foreach OBJ,$(1) $(4),$(call ONE_CXX_O,$(1),$(2),$(3),$(OBJ))$(NEWLINE))
+out/$(1)/c++/$(2)/$(1): $(foreach OBJ,$(1) $(4),out/$(1)/c++/$(2)/$(OBJ).o) | Makefile
+	@mkdir -p $$(dir $$@)
+	$(CXX) -o $$@ $$^ $(CXXFLAGS) $(3)
+ALL_TARGETS += out/$(1)/c++/$(2)/$(1)
+endef
+
+define ADD_BOTH =
+$(call ADD_C,$(1),$(2)/static,-static $(3),$(4))
+$(call ADD_C,$(1),$(2)/dynamic,$(3),$(4))
+$(call ADD_CXX,$(1),$(2)/static,-static $(3),$(4))
+$(call ADD_CXX,$(1),$(2)/dynamic,$(3),$(4))
 endef
 
 define ADD =
-$(call ADD_C,$(1),$(2)/static,-static $(3))
-$(call ADD_CXX,$(1),$(2)/static,-static $(3))
-$(call ADD_C,$(1),$(2)/dynamic,$(3))
-$(call ADD_CXX,$(1),$(2)/dynamic,$(3))
+$(call ADD_CXX,$(1),$(2)/static,-static $(3),$(4))
+$(call ADD_CXX,$(1),$(2)/dynamic,$(3),$(4))
 endef
 
-$(eval $(call ADD,hello,none,))
-$(eval $(call ADD,hello,lto,-flto))
-$(eval $(call ADD,hello,sections,-ffunction-sections -fdata-sections))
+define FOR_ALL_FLAGS =
+$$(eval $$(call $(1),$(2),none,,$(3)))
+$$(eval $$(call $(1),$(2),lto,-flto,$(3)))
+$$(eval $$(call $(1),$(2),sections,-ffunction-sections -fdata-sections,$(3)))
+endef
+
+$(eval $(call FOR_ALL_FLAGS,ADD_BOTH,empty))
+$(eval $(call FOR_ALL_FLAGS,ADD_BOTH,hello,message))
+$(eval $(call FOR_ALL_FLAGS,ADD,global))
 
 all: $(ALL_TARGETS)
 
