@@ -1,3 +1,5 @@
+#include <iostream>
+
 int i = 0;
 struct Global {
 	Global() { i = 1; };
@@ -6,4 +8,5 @@ struct Global {
 Global global;
 
 int main() {
+	std::cout << "i = " << i << "\n";
 }
