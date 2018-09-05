@@ -1,7 +1,7 @@
 CC:=/opt/compiler-explorer/gcc-8.1.0/bin/gcc
 CXX:=/opt/compiler-explorer/gcc-8.1.0/bin/g++
-CFLAGS=-Os
-CXXFLAGS=-Os
+CFLAGS=-Os -fPIC
+CXXFLAGS=-Os -fPIC
 
 # Gotta love make...
 define NEWLINE =
@@ -38,11 +38,22 @@ out/$(1)/c++/$(2)/$(1): $(foreach OBJ,$(1) $(4),out/$(1)/c++/$(2)/$(OBJ).o) | Ma
 ALL_TARGETS += out/$(1)/c++/$(2)/$(1)
 endef
 
+define ADD_CXX_DSO =
+out/$(1)/c++/$(2)-dso/$(1).so: $(foreach OBJ,$(4),out/$(1)/c++/$(2)/$(OBJ).o) | Makefile
+	@mkdir -p $$(dir $$@)
+	$(CXX) -shared -o $$@ $$^ $(CXXFLAGS) $(3)
+out/$(1)/c++/$(2)-dso/$(1): out/$(1)/c++/$(2)/$(1).o out/$(1)/c++/$(2)-dso/$(1).so | Makefile
+	@mkdir -p $$(dir $$@)
+	$(CXX) -o $$@ $$^ $(CXXFLAGS) $(3)
+ALL_TARGETS += out/$(1)/c++/$(2)-dso/$(1)
+endef
+
 define ADD_BOTH =
 $(call ADD_C,$(1),$(2)/static,-static $(3),$(4))
 $(call ADD_C,$(1),$(2)/dynamic,$(3),$(4))
 $(call ADD_CXX,$(1),$(2)/static,-static $(3),$(4))
 $(call ADD_CXX,$(1),$(2)/dynamic,$(3),$(4))
+$(call ADD_CXX_DSO,$(1),$(2)/dynamic,$(3),$(4))
 endef
 
 define ADD =
