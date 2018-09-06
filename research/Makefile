@@ -53,7 +53,9 @@ $(call ADD_C,$(1),$(2)/static,-static $(3),$(4))
 $(call ADD_C,$(1),$(2)/dynamic,$(3),$(4))
 $(call ADD_CXX,$(1),$(2)/static,-static $(3),$(4))
 $(call ADD_CXX,$(1),$(2)/dynamic,$(3),$(4))
+ifneq ("$(4)","")
 $(call ADD_CXX_DSO,$(1),$(2)/dynamic,$(3),$(4))
+endif
 endef
 
 define ADD =

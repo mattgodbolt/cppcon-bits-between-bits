@@ -50,8 +50,58 @@
         <section>
             <h3>The Bits Between the Bits</h3>
             <h4>How we get to <code>main()</code></h4>
-            <h6>Matt Godbolt<br><a href="https:/>/twitter.com/mattgodbolt">@mattgodbolt</a></h6>
+            <h6>Matt Godbolt<br><a href="https://twitter.com/mattgodbolt">@mattgodbolt</a></h6>
             <h6>CppCon 2018</h6>
+        </section>
+        <section>
+            <!-- GCC 8.1 -->
+            <section>
+                <h3>A program</h3>
+                <pre><code class="cpp" data-trim>
+                int main() {}
+                </code></pre>
+                <pre><code class="bash fragment" data-trim data-noescape>
+                    $ gcc -Os empty.c -o c/empty
+                    $ g++ -Os empty.cpp -o cpp/empty
+                    <div class="fragment">
+                    $ ls -l cpp/empty c/empty
+                    </div><div class="fragment">7976 c/empty
+                    </div><div class="fragment">7976 cpp/empty</div>
+                </code></pre>
+            </section>
+            <section>
+                <h3>What's in it?</h3>
+                <pre><code class="fragment bash" data-trim data-noescape>
+                    $ objdump --no-show-raw-insn -dC cpp/empty</code></pre>
+                <pre><code class="fragment asm" data-snippet="empty-objdump"></code></pre>
+            </section>
+            <section>
+                <h3>What's in it?</h3>
+                <pre><code class="bash fragment" data-trim data-noescape>
+$ readelf -a cpp/empty<div class="fragment">
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00
+  Class:                             ELF64
+...
+Section Headers:
+  [Nr] Name              Type             Address           Offset
+  [ 0]                   NULL             0000000000000000  00000000
+  [ 1] .interp           PROGBITS         0000000000400238  00000238
+...
+Relocation section '.rela.dyn' at offset 0x380 contains 2 entries:
+  Offset Type              Sym. Value   Sym. Name + Addend
+0600ff0  R_X86_64_GLOB_DAT 00000000     __libc_start_main@GLIBC_2.2.5 + 0
+0600ff8  R_X86_64_GLOB_DAT 00000000     __gmon_start__ + 0
+...
+Symbol table '.symtab' contains 58 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+...
+    24: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS empty.cpp
+    25: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS crtstuff.c
+...
+                    </div>
+                </code></pre>
+            </section>
         </section>
         <section>
             Edit code / MAKE / run!
@@ -146,6 +196,7 @@
 <script src="reveal.js/lib/js/head.min.js"></script>
 <script src="reveal.js/js/reveal.js"></script>
 
+
 <script>
     Reveal.initialize({
         history: true,
@@ -157,6 +208,7 @@
             {src: 'reveal.js/plugin/markdown/marked.js'},
             {src: 'reveal.js/plugin/markdown/markdown.js'},
             {src: 'reveal.js/plugin/notes/notes.js', async: true},
+            {src: 'snippets.js'},
             {
                 src: 'reveal.js/plugin/highlight/highlight.js',
                 async: true,
