@@ -20,16 +20,20 @@
             color: #ffffff;
         }
 
-        }
-
         .no-border {
             background: none !important;
             border: none !important;
             box-shadow: none !important;
+        }
 
         div.quote {
             max-width: 70%;
             margin: auto;
+        }
+
+        div.attribution {
+            font-style: italic;
+            font-size: x-small;
         }
     </style>
     <!-- Theme used for syntax highlighting of code -->
@@ -60,7 +64,7 @@
                 <pre><code class="cpp" data-trim>
                 int main() {}
                 </code></pre>
-                <pre><code class="bash fragment" data-trim data-noescape>
+                <pre class="fragment"><code class="bash" data-trim data-noescape>
                     $ gcc -Os empty.c -o c/empty
                     $ g++ -Os empty.cpp -o cpp/empty
                     <div class="fragment">
@@ -71,15 +75,14 @@
             </section>
             <section>
                 <h3>What's in it?</h3>
-                <pre><code class="fragment bash" data-trim data-noescape>
+                <pre class="fragment"><code class="bash" data-trim data-noescape>
                     $ objdump --no-show-raw-insn -dC cpp/empty</code></pre>
-                <pre><code class="fragment asm" data-snippet="empty-objdump"></code></pre>
+                <pre class="fragment"><code class="x86asm" data-snippet="empty-objdump"></code></pre>
             </section>
             <section>
                 <h3>What's in it?</h3>
-                <pre><code class="bash fragment" data-trim data-noescape>
-$ readelf -a cpp/empty<div class="fragment">
-ELF Header:
+                <pre class="fragment"><code class="bash" data-trim data-noescape>
+$ readelf -a cpp/empty<div class="fragment">ELF Header:
   Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00
   Class:                             ELF64
 ...
@@ -101,6 +104,14 @@ Symbol table '.symtab' contains 58 entries:
 ...
                     </div>
                 </code></pre>
+            </section>
+            <section>
+                <h3>The ELF file format</h3>
+                <img src="images/Elf-layout--en.svg" height="400px">
+                <div class="attribution">
+                    By Surueña [<a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>], <a
+                        href="https://commons.wikimedia.org/wiki/File:Elf-layout--en.svg">from Wikimedia Commons</a>
+                </div>
             </section>
         </section>
         <section>
