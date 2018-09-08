@@ -71,6 +71,8 @@ endef
 
 $(eval $(call FOR_ALL_FLAGS,ADD_BOTH,empty))
 $(eval $(call FOR_ALL_FLAGS,ADD_BOTH,hello,message))
+CFLAGS=-O0 -fPIC -g
+CXXFLAGS=-O0 -fPIC -g
 $(eval $(call FOR_ALL_FLAGS,ADD,global))
 
 all: $(ALL_TARGETS)

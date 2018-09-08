@@ -1,12 +1,14 @@
 #include <iostream>
 
-int i = 0;
+int i;
 struct Global {
-	Global() { i = 1; };
+  Global() { 
+    i++; 
+  }
 };
 
 Global global;
 
 int main() {
-	std::cout << "i = " << i << "\n";
+  std::cout << "i = " << i << "\n";
 }
