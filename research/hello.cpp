@@ -2,8 +2,8 @@
 #include "message.h"
 
 void greet() {
-	std::cout << getMessage() << "\n";
+  std::cout << getMessage() << "\n";
 }
 int main() {
-	greet();
+  greet();
 }

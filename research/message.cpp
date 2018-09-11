@@ -1,5 +1,4 @@
-#include <stdio.h>
-
+#include "message.h"
 const char *getMessage() {
-	return "Hello world";
+  return "Hello world";
 }

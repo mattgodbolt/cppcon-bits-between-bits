@@ -35,6 +35,19 @@
             font-style: italic;
             font-size: x-small;
         }
+
+        .flex {
+            display: flex;
+            flex-wrap: wrap;;
+        }
+
+        .w50 {
+            flex: 0 1 50%;
+        }
+
+        .w100 {
+            flex: 0 1 50%;
+        }
     </style>
     <!-- Theme used for syntax highlighting of code -->
     <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
@@ -234,17 +247,88 @@ int __libc_csu_init(int argc, char **argv, char **envp) {
                     <li>Collects data into sections (TODO)</li>
                 </ul>
             </section>
-        </section>
+            <section>
+                <h3>A more representative program</h3>
+                <!-- TODO sort out formatting -->
+                <div class="flex">
+                    <div class="w50">
+                    <pre><code data-trim>
+// hello.cpp
+void greet() {
+  std::cout &lt;&lt; getMessage() &lt;&lt; "\n";
+}
+int main() {
+  greet();
+}
 
-        <section>
-            g++ -o /dev/null -x c /dev/null -Wl,--verbose
-        </section>
-
-        <!--- this here as the segment from the Global example where the magic happens -->
-        <section>
-        </section>
-        <section>
-    <pre><code data-trim>
+                    </code></pre>
+                    </div>
+                    <div class="w50">
+                    <pre><code data-trim>
+// message.cpp
+const char *getMessage() {
+  return "Hello world";
+}
+                    </code></pre>
+                    </div>
+                    <div class="w100">
+                <pre class="fragment"><code data-trim>
+                $ g++ -Os -o hello.o hello.cpp
+                $ g++ -Os -o message.o message.cpp
+                $ g++ -Os -o hello message.o hello.o
+                </code>
+                </pre>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <h3>Object files</h3>
+                <pre><code data-trim>
+$ file hello hello.o message.o
+hello:     ELF 64-bit LSB executable, x86-64,
+           dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2,
+           for GNU/Linux 3.2.0, not stripped
+hello.o:   ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
+message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
+                </code></pre>
+            </section>
+            <section>
+                <h3>What's in an object file?</h3>
+                <pre class="fragment"><code class="bash" data-trim data-noescape>
+                    $ objdump -dC hello.o</code></pre>
+                <pre class="fragment"><code class="x86asm" data-snippet="hello-o-objdump"></code></pre>
+            </section>
+            <section>
+                <h3>What's in an object file?</h3>
+                <pre class="fragment"><code class="bash" data-trim data-noescape>
+                    $ objdump --reloc --no-show-raw-insn -dC hello.o</code></pre>
+                <pre class="fragment"><code class="x86asm" data-snippet="hello-o-objdump-reloc"></code></pre>
+            </section>
+            <section>
+                <h3>Relocations</h3>
+                <ul>
+                    <li>Different types</li>
+                    <li>Used within same object file</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Symbols</h3>
+                Show objdump --syms
+            </section>
+            <section>
+                <h3>Linker then...</h3>
+                <ul>
+                    <li>Reads all the inputs</li>
+                    <li>Identifies symbols</li>
+                    <li>Applies relocations</li>
+                    <li class="fragment">But how to decide layout?</li>
+                </ul>
+            </section>
+            <section>
+                <pre><code>g++ -o /dev/null -x c /dev/null -Wl,--verbose</code></pre>
+            </section>
+            <section>
+                    <pre><code data-trim>
   .init_array     :
   {
     PROVIDE_HIDDEN (__init_array_start = .);
@@ -254,93 +338,56 @@ int __libc_csu_init(int argc, char **argv, char **envp) {
     PROVIDE_HIDDEN (__init_array_end = .);
   }
     </code></pre>
+
+            </section>
+            <section>
+                <h3>Sections</h3>
+            </section>
+            <section>
+                <h3>Now we know!</h3>
+                <ul>
+                    <li>Compiler makes a "static init" func for each TU</li>
+                    <li>Compiler puts a single pointer to this function into a special section init_array</li>
+                    <li>Linker gathers all init_arrays together</li>
+                    <li>Linker defines symbols pointing to begin and end of init_arrays</li>
+                    <li>C runtime walks all and calls them in turn</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Finalisers?</h3>
+            </section>
         </section>
 
         <section>
-            Edit code / MAKE / run!
-            But what witchcraft happens between compiler and that?
-            Knowing why will help you understand... ODR violations, link times etc
-        </section>
-        <section>
-            Overview
-            linux only
-        </section>
-        <section>
-            Example C program, static and non-static (MAYBE ONLY NON-STATIC?)
-            <ul>
-                <li>Why is it so large?</li>
-                <li>What's in it?</li>
-            </ul>
-        </section>
-        <section>
-            <p>C world!
-                .o files, tools to look at them
-                [maybe turn off debug symbols for this bit?]</p>
-            <ul>
-                <li>nm (show T main and U puts)</li>
-                <li>objdump -d (show disassembly with call 0x00000)</li>
-                <li>Show that even symbols in the same file aren't resolved (tricky)</li>
-                <li>objdump -r (show reloc)</li>
-                <li>objdump -dr (show together)</li>
-                <li>readelf? (needed later but for now maybe no?)</li>
-            </ul>
-            <p>
-                sections, relocations (TODO uses for it, hot/cold code and other magic)
-                WEAK references (setup for ODR stuff?) - maybe introduce later with C++
-            </p>
-        </section>
-        <section>
-            Quick mention of .a files?
-        </section>
-        <section>
-            The linker! (ld, gold)
-            High level view of what it does
-            * gather sections together, resolve relocations (CHECK is it relocations?)
-        </section>
-        <section>
-            Finding libraries used (-v)
-            - dissect command line, look at -dumpspecs (doesn't have everything we'd need to look at)
-            start group, end group (library ordering matters)
-        </section>
-        <section>
-            So far C, what about C++?
-            simple template usage, show weak refs? (setup for ODR viol?)
-        </section>
-        <section>
-            global constructors, destructors
-            - callgrind to main? wth is going on? poll on how many instructions for an empty executable
-        </section>
-        <section>
-            But what about dynamic linkage?
-            ld.so, interpreter
-            ELF file layout slide?
-        </section>
-        <section>
-            A new challenger enters: LTO!
-            - betterer, ODR violation finder
-        </section>
-        <section>
-            Practical advice
-            - `LD_DEBUG` and `LD_PRELOAD`
-            - LTO usage?
-            -
-        </section>
-        <section>
-            - linker sections (-ffunction-sections, -fdata-sections, --gc-sections?)
-            -
-        </section>
-        <section>
-            <section>Bonus slides</section>
             <section>
-                War stories
-                - exceptions thrown across SO bounadaries
-                - (global construction order issues?)
+                <h3>Dynamic vs static</h3>
+                .a files
+            </section>
+            <scetion>
+                interp
+            </scetion>
+            <section>
+                resolution (debug?)
             </section>
             <section>
-                Advanced section-fu (putting sideband data in a section?)
+                Practical advice
+                - `LD_DEBUG` and `LD_PRELOAD`
+                - LTO usage?
+                -
             </section>
             <section>
-                Linker sctipts?
+                - linker sections (-ffunction-sections, -fdata-sections, --gc-sections?)
+                -
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h3>Advanced stuff</h3>
+                <ul>
+                    <li>Weak references</li>
+                    <li>LTO</li>
+                </ul>
             </section>
         </section>
     </div>
