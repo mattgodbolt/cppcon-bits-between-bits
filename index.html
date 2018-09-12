@@ -46,7 +46,7 @@
         }
 
         .w100 {
-            flex: 0 1 50%;
+            flex: 0 1 100%;
         }
     </style>
     <!-- Theme used for syntax highlighting of code -->
@@ -96,7 +96,7 @@
                 <h3>What's in it?</h3>
                 <pre class="fragment"><code class="bash" data-trim>
                     $ readelf -a cpp/empty</code></pre>
-                <pre class="fragment"><code data-trim>ELF Header:
+                <pre class="fragment"><code data-trim class="llvm">ELF Header:
   Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00
   Class:                             ELF64
 ...
@@ -224,7 +224,9 @@ int __libc_csu_init(int argc, char **argv, char **envp) {
             </section>
             <section>
                 <h3>Ok but...</h3>
-                Where do <code>__init_array_start</code> and <code>__init_array_end</code> come from?
+                <p>
+                    Where do <code>__init_array_start</code><br>and <code>__init_array_end</code> come from?
+                </p>
             </section>
             <section>
                 <h3>Witchcraft!</h3>
@@ -240,12 +242,23 @@ int __libc_csu_init(int argc, char **argv, char **envp) {
             <section>
                 <h3>The Linker</h3>
                 <p>What does it do?</p>
-                <ul>
+                <ul class="fragment">
                     <li>Resolves references between TUs</li>
                     <li>Writes metadata (e.g. ELF headers)</li>
-                    <li>Determines the layout of an executable</li>
-                    <li>Collects data into sections (TODO)</li>
+                    <li>Determines the layout of an executable
+                        <ul class="fragment">
+                            <li>Collects together sections</li>
+                        </ul>
+                    </li>
                 </ul>
+            </section>
+            <section>
+                <h3>The ELF file format</h3>
+                <img src="images/Elf-layout--en.svg" height="400px">
+                <div class="attribution">
+                    By Surueña [<a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>], <a
+                        href="https://commons.wikimedia.org/wiki/File:Elf-layout--en.svg">from Wikimedia Commons</a>
+                </div>
             </section>
             <section>
                 <h3>A more representative program</h3>
@@ -272,10 +285,12 @@ const char *getMessage() {
                     </code></pre>
                     </div>
                     <div class="w100">
-                <pre class="fragment"><code data-trim>
+                <pre><code data-trim>
                 $ g++ -Os -o hello.o hello.cpp
                 $ g++ -Os -o message.o message.cpp
                 $ g++ -Os -o hello message.o hello.o
+                $ ./hello
+                Hello world
                 </code>
                 </pre>
                     </div>
@@ -363,9 +378,9 @@ message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
                 <h3>Dynamic vs static</h3>
                 .a files
             </section>
-            <scetion>
+            <section>
                 interp
-            </scetion>
+            </section>
             <section>
                 resolution (debug?)
             </section>
