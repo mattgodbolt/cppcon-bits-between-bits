@@ -33,7 +33,7 @@
         }
 
         function postProcess(text) {
-            const MaxLength = 70;
+            const MaxLength = 1000;
             let lastBlank = true;
             return text
                 .split("\n")
@@ -45,14 +45,18 @@
                 })
                 .map(x => expandTabs(x, 2))
                 .map(x => x.length >= MaxLength ? x.substr(0, MaxLength - 3) + "..." : x)
-                .join("\n");
+                .join("\n")
+                .replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
 
         for (let element of document.querySelectorAll('pre code')) {
             if (element.hasAttribute('data-snippet')) {
                 xhrGet("snippets/" + element.getAttribute('data-snippet'))
                     .then((res) => {
-                        element.innerText = postProcess(res);
+                        element.innerHTML = postProcess(res);
+                        if (typeof(window.hljs) === "function") {
+                            window.hljs.highlightBlock(element);
+                        }
                     });
             }
         }

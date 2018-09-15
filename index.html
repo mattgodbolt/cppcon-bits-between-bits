@@ -38,15 +38,47 @@
 
         .flex {
             display: flex;
-            flex-wrap: wrap;;
+            flex-wrap: wrap;
+            width: 100%;
         }
 
         .w50 {
             flex: 0 1 50%;
         }
 
+        .w30 {
+            flex: 0 1 30%;
+        }
+
         .w100 {
             flex: 0 1 100%;
+        }
+
+        .reveal pre code.hljs {
+            overflow-x: hidden;
+            text-overflow: ellipsis;
+        }
+
+        div.elf-label {
+            display: inline-block;
+            font-style: italic;
+        }
+
+        div.elf-file {
+            margin: 5px;
+            padding: 10px;
+            display: inline-block;
+            background: darkmagenta;
+            border: 5px solid white;
+            text-align: center;
+        }
+
+        div.elf-section {
+            margin: 10px;
+            padding: 10px;
+            border: 5px solid black;
+            background: blue;
+            border-radius: 25px;
         }
     </style>
     <!-- Theme used for syntax highlighting of code -->
@@ -96,27 +128,30 @@
                 <h3>What's in it?</h3>
                 <pre class="fragment"><code class="bash" data-trim>
                     $ readelf -a cpp/empty</code></pre>
-                <pre class="fragment"><code data-trim class="llvm">ELF Header:
-  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00
-  Class:                             ELF64
-...
-Section Headers:
-  [Nr] Name              Type             Address           Offset
-  [ 0]                   NULL             0000000000000000  00000000
-  [ 1] .interp           PROGBITS         0000000000400238  00000238
-...
-Relocation section '.rela.dyn' at offset 0x380 contains 2 entries:
-  Offset Type              Sym. Value   Sym. Name + Addend
-0600ff0  R_X86_64_GLOB_DAT 00000000     __libc_start_main@GLIBC_2.2.5 + 0
-0600ff8  R_X86_64_GLOB_DAT 00000000     __gmon_start__ + 0
-...
-Symbol table '.symtab' contains 58 entries:
-   Num:    Value          Size Type    Bind   Vis      Ndx Name
-...
-    24: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS empty.cpp
-    25: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS crtstuff.c
-...
-                </code></pre>
+                <pre class="fragment"><code data-trim class="llvm" data-snippet="empty-readelf"></code></pre>
+                <!--
+                                <pre class="fragment"><code data-trim class="llvm">ELF Header:
+                  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00
+                  Class:                             ELF64
+                ...
+                Section Headers:
+                  [Nr] Name              Type             Address           Offset
+                  [ 0]                   NULL             0000000000000000  00000000
+                  [ 1] .interp           PROGBITS         0000000000400238  00000238
+                ...
+                Relocation section '.rela.dyn' at offset 0x380 contains 2 entries:
+                  Offset Type              Sym. Value   Sym. Name + Addend
+                0600ff0  R_X86_64_GLOB_DAT 00000000     __libc_start_main@GLIBC_2.2.5 + 0
+                0600ff8  R_X86_64_GLOB_DAT 00000000     __gmon_start__ + 0
+                ...
+                Symbol table '.symtab' contains 58 entries:
+                   Num:    Value          Size Type    Bind   Vis      Ndx Name
+                ...
+                    24: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS empty.cpp
+                    25: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS crtstuff.c
+                ...
+                                </code></pre>
+                -->
             </section>
             <section>
                 <h3>The ELF file format</h3>
@@ -134,12 +169,6 @@ Symbol table '.symtab' contains 58 entries:
                     <li><code>.data</code>&mdash; read/write data</li>
                     <li><code>.bss</code> &mdash; uninitialised data</li>
                 </ul>
-            </section>
-            <section>
-                <h3>Sections</h3>
-                <pre class="fragment"><code class="bash" data-trim data-noescape>
-                    $ readelf --sections cpp/empty</code></pre>
-                <pre class="fragment"><code class="x86asm" data-snippet="empty-readelf-sections"></code></pre>
             </section>
         </section>
         <section>
@@ -227,6 +256,7 @@ int __libc_csu_init(int argc, char **argv, char **envp) {
                 <p>
                     Where do <code>__init_array_start</code><br>and <code>__init_array_end</code> come from?
                 </p>
+                <a class="fragment" target="_blank" href="https://godbolt.org/z/UJgjWF">https://godbolt.org/z/UJgjWF</a>
             </section>
             <section>
                 <h3>Witchcraft!</h3>
@@ -253,7 +283,7 @@ int __libc_csu_init(int argc, char **argv, char **envp) {
                 </ul>
             </section>
             <section>
-                <h3>The ELF file format</h3>
+                <h3>The ELF file format (again)</h3>
                 <img src="images/Elf-layout--en.svg" height="400px">
                 <div class="attribution">
                     By Surueña [<a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>], <a
@@ -331,41 +361,93 @@ message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
                 Show objdump --syms
             </section>
             <section>
-                <h3>Linker then...</h3>
+                <h3>Linker...</h3>
                 <ul>
                     <li>Reads all the inputs</li>
                     <li>Identifies symbols</li>
                     <li>Applies relocations</li>
-                    <li class="fragment">But how to decide layout?</li>
                 </ul>
             </section>
             <section>
-                <pre><code>g++ -o /dev/null -x c /dev/null -Wl,--verbose</code></pre>
+                <div class="flex">
+                    <div class="elf-file w30">
+                        <div class="elf-label">message.o</div>
+                        <div class="elf-section">
+                            <div class="elf-label">.text</div>
+                            <div><code>getMessage()</code></div>
+                        </div>
+                        <div class="elf-section">
+                            <div class="elf-label">.ro-data</div>
+                            <div><code>"Hello world"</code></div>
+                        </div>
+                    </div>
+                    <div class="elf-file w30">
+                        <div class="elf-label">hello.o</div>
+                        <div class="elf-section">
+                            <div class="elf-label">.text</div>
+                            <div><code>greet()</code></div>
+                        </div>
+                        <div class="elf-section">
+                            <div class="elf-label">.text.init</div>
+                            <div><code>main()</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="elf-file w30 fragment">
+                        <div class="elf-label">hello</div>
+                        <div class="elf-section">
+                            <div class="elf-label">Program Headers</div>
+                        </div>
+                        <div class="elf-section">
+                            <div class="elf-label">.text</div>
+                            <div><code>greet() {}</code></div>
+                            <div><code>getMessage()</code></div>
+                        </div>
+                        <div class="elf-section">
+                            <div class="elf-label">.text.init</div>
+                            <div><code>main()</code>
+                            </div>
+                        </div>
+                        <div class="elf-section">
+                            <div class="elf-label">.ro-data</div>
+                            <div><code>"Hello world"</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
             <section>
-                    <pre><code data-trim>
+                <h3>Linker Scripts</h3>
+                <pre><code>$ g++ -o /dev/null -x c /dev/null -Wl,--verbose</code></pre>
+                <pre class="fragment"><code class="cpp" data-snippet="linker-script"></code></pre>
+            </section>
+            <section>
+                    <pre><code data-trim data-noescape>
   .init_array     :
   {
-    PROVIDE_HIDDEN (__init_array_start = .);
-    KEEP (*(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*)))
+<div class="fragment highlight-current-code">    PROVIDE_HIDDEN (__init_array_start = .);
+</div><div class="fragment highlight-current-code">    KEEP (*(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*)))
     KEEP (*(.init_array EXCLUDE_FILE (
             *crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .ctors))
-    PROVIDE_HIDDEN (__init_array_end = .);
-  }
+</div><div class="fragment highlight-current-code">    PROVIDE_HIDDEN (__init_array_end = .);
+</div>  }
     </code></pre>
-
-            </section>
-            <section>
-                <h3>Sections</h3>
             </section>
             <section>
                 <h3>Now we know!</h3>
                 <ul>
-                    <li>Compiler makes a "static init" func for each TU</li>
-                    <li>Compiler puts a single pointer to this function into a special section init_array</li>
-                    <li>Linker gathers all init_arrays together</li>
-                    <li>Linker defines symbols pointing to begin and end of init_arrays</li>
-                    <li>C runtime walks all and calls them in turn</li>
+                    <li>Compiler:
+                        <ul class="fragment">
+                            <li>"static init" function for each TU</li>
+                            <li>pointer to this function into <code>init_array</code></li>
+                        </ul>
+                    </li>
+                    <li class="fragment">Linker:
+                        <ul>
+                            <li>gathers all init_arrays together</li>
+                            <li>script defines symbols pointing at begin and end of <code>init_array</code></li>
+                        </ul>
+                    <li class="fragment">C runtime walks <code>init_array</code> and calls each</li>
                 </ul>
             </section>
             <section>
@@ -382,7 +464,13 @@ message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
                 interp
             </section>
             <section>
+                `-fpic` and `-fno-semantic-interposition` https://godbolt.org/z/CucbcV
+                (but not for C++ symbols): https://godbolt.org/z/7lUA6k
+            </section>
+            <section>
                 resolution (debug?)
+                LD_BIND_NOW and -x bindybind
+                --- note that global symbols in shared libs _still_ go through PLT (semantic interposition)
             </section>
             <section>
                 Practical advice
@@ -404,6 +492,12 @@ message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
                     <li>LTO</li>
                 </ul>
             </section>
+        </section>
+        <section>
+            <h3>More reading</h3>
+            <ul>
+                <li>https://www.airs.com/blog/archives/38</li>
+            </ul>
         </section>
     </div>
 </div>
