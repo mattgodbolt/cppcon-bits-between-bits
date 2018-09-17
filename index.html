@@ -450,18 +450,39 @@ message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
                     <li class="fragment">C runtime walks <code>init_array</code> and calls each</li>
                 </ul>
             </section>
-            <section>
-                <h3>Finalisers?</h3>
-            </section>
         </section>
 
         <section>
             <section>
-                <h3>Dynamic vs static</h3>
-                .a files
+                <h3>Dynamic linking</h3>
+                <pre><code data-trim>
+$ ls -l dynamic/hello static/hello
+8,688      dynamic/hello*
+2,406,632  static/hello*
+                </code></pre>
             </section>
             <section>
-                interp
+                <h3>Another hello world</h3>
+                <pre><code data-trim class="bash">
+                $ g++ -Os -o message.o message.cpp
+                $ g++ -shared -o hello.so message.o
+                $ g++ -Os -o hello hello.o
+                $ g++ -Os -o hello.o hello.cpp -L. -lhello
+                $ ./hello
+                Hello world
+                </code></pre>
+            </section>
+            <section>
+                <h3>More ELF headers</h3>
+                <pre><code>$ readelf --dynamic --program-headers dynamic-dso/hello</code></pre>
+                <pre><code class="bash" data-snippet="readelf-d-dynamic-hello"></code></pre>
+                <aside class="notes">
+                    Show interp and dynamic
+                </aside>
+            </section>
+            <section>
+                <h3>Debug v2</h3>
+<pre><code>$ gdb </code></pre>
             </section>
             <section>
                 `-fpic` and `-fno-semantic-interposition` https://godbolt.org/z/CucbcV
@@ -490,6 +511,7 @@ message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
                 <ul>
                     <li>Weak references</li>
                     <li>LTO</li>
+                    <li>ODR violations</li>
                 </ul>
             </section>
         </section>

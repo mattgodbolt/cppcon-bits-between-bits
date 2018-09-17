@@ -13,6 +13,7 @@ snippets: research Makefile
 	objdump --no-show-raw-insn --reloc -dC research/out/hello/c++/none/dynamic/hello.o > snippets/hello-o-objdump-reloc
 	readelf --sections research/out/empty/c++/none/dynamic/empty > snippets/empty-readelf-sections
 	g++ -o /dev/null research/empty.cpp -Wl,--verbose > snippets/linker-script 2>&1
+	readelf --dynamic --program-headers research/out/hello/c++/none/dynamic-dso/hello | sed 's/0x00000000/0x/g; s|out/hello/c++/none/dynamic-dso/||g' > snippets/readelf-d-dynamic-hello
 
 clean:
 	rm -rf snippets

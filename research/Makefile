@@ -38,13 +38,14 @@ out/$(1)/c++/$(2)/$(1): $(foreach OBJ,$(1) $(4),out/$(1)/c++/$(2)/$(OBJ).o) | Ma
 ALL_TARGETS += out/$(1)/c++/$(2)/$(1)
 endef
 
+ORIGIN=$$$$ORIGIN
 define ADD_CXX_DSO =
-out/$(1)/c++/$(2)-dso/$(1).so: $(foreach OBJ,$(4),out/$(1)/c++/$(2)/$(OBJ).o) | Makefile
+out/$(1)/c++/$(2)-dso/lib$(1).so: $(foreach OBJ,$(4),out/$(1)/c++/$(2)/$(OBJ).o) | Makefile
 	@mkdir -p $$(dir $$@)
 	$(CXX) -shared -o $$@ $$^ $(CXXFLAGS) $(3)
-out/$(1)/c++/$(2)-dso/$(1): out/$(1)/c++/$(2)/$(1).o out/$(1)/c++/$(2)-dso/$(1).so | Makefile
+out/$(1)/c++/$(2)-dso/$(1): out/$(1)/c++/$(2)/$(1).o | out/$(1)/c++/$(2)-dso/lib$(1).so Makefile
 	@mkdir -p $$(dir $$@)
-	$(CXX) -o $$@ $$^ $(CXXFLAGS) $(3)
+	$(CXX) -o $$@ $$^ $(CXXFLAGS) $(3) -Lout/$(1)/c++/$(2)-dso -lhello '-Wl,--rpath,$(ORIGIN)'
 ALL_TARGETS += out/$(1)/c++/$(2)-dso/$(1)
 endef
 
