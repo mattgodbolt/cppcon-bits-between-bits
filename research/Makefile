@@ -71,9 +71,9 @@ $$(eval $$(call $(1),$(2),sections,-ffunction-sections -fdata-sections,$(3)))
 endef
 
 $(eval $(call FOR_ALL_FLAGS,ADD_BOTH,empty))
-$(eval $(call FOR_ALL_FLAGS,ADD_BOTH,hello,message))
 CFLAGS=-O0 -fPIC -g
 CXXFLAGS=-O0 -fPIC -g
+$(eval $(call FOR_ALL_FLAGS,ADD_BOTH,hello,message))
 $(eval $(call FOR_ALL_FLAGS,ADD,global))
 
 all: $(ALL_TARGETS)

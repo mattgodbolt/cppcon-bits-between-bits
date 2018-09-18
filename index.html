@@ -167,7 +167,7 @@
                     <li><code>.text</code> &mdash; code</li>
                     <li><code>.rodata</code> &mdash; read-only data</li>
                     <li><code>.data</code>&mdash; read/write data</li>
-                    <li><code>.bss</code> &mdash; uninitialised data</li>
+                    <li><code>.bss</code> &mdash; zero-initialised data</li>
                 </ul>
             </section>
         </section>
@@ -236,6 +236,7 @@ $2 = 1
                 <h3>Who calls this function?</h3>
             </section>
             <section>
+                <h3>libc spelunking</h3>
                 <pre><code data-trim data-noescape>
 // Paraphrased from glibc/csu/elf-init.c
 <div class="fragment highlight-current-code">typedef void (*init_func)(int, char **, char **);
@@ -249,7 +250,6 @@ int __libc_csu_init(int argc, char **argv, char **envp) {
     (*__init_array_start[i])(argc, argv, envp);
 </div>}
                 </code></pre>
-                <a class="fragment" target="_blank" href="https://godbolt.org/z/PRQ_-Z">https://godbolt.org/z/PRQ_-Z</a>
             </section>
             <section>
                 <h3>Ok but...</h3>
@@ -292,7 +292,6 @@ int __libc_csu_init(int argc, char **argv, char **envp) {
             </section>
             <section>
                 <h3>A more representative program</h3>
-                <!-- TODO sort out formatting -->
                 <div class="flex">
                     <div class="w50">
                     <pre><code data-trim>
@@ -450,6 +449,10 @@ message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
                     <li class="fragment">C runtime walks <code>init_array</code> and calls each</li>
                 </ul>
             </section>
+            <section>
+                <h3>Advanced stuff</h3>
+                - linker sections (-ffunction-sections, -fdata-sections, --gc-sections?)
+            </section>
         </section>
 
         <section>
@@ -465,7 +468,7 @@ $ ls -l dynamic/hello static/hello
                 <h3>Another hello world</h3>
                 <pre><code data-trim class="bash">
                 $ g++ -Os -o message.o message.cpp
-                $ g++ -shared -o hello.so message.o
+                $ g++ -shared -o libhello.so message.o
                 $ g++ -Os -o hello hello.o
                 $ g++ -Os -o hello.o hello.cpp -L. -lhello
                 $ ./hello
@@ -482,37 +485,53 @@ $ ls -l dynamic/hello static/hello
             </section>
             <section>
                 <h3>Debug v2</h3>
-<pre><code>$ gdb </code></pre>
+                <pre><code>$ gdb </code></pre>
+                <aside class="notes">
+                    <pre><code>
+break main
+step into greet (why is this not a plt ref?)
+stepi
+watch *(long *)0x601018 # for poke back
+                    </code><</pre>
+                </aside>
             </section>
             <section>
-                `-fpic` and `-fno-semantic-interposition` https://godbolt.org/z/CucbcV
-                (but not for C++ symbols): https://godbolt.org/z/7lUA6k
+                <pre><code data-trim>
+ 0x4006a0:  pushq 0x200962(%rip)  # 0x601008
+ 0x4006a6:  jmpq  *0x200964(%rip) # 0x601010
+_Z10getMessagev@plt:
+ 0x4006b0:  jmpq  *0x200962(%rip) # 0x601018
+ 0x4006b6:  pushq $0x0
+ 0x4006bb:  jmpq  0x4006a0
+...
+ 0x601010:  .quad 0x7ffff7dec750
+ 0x601018:  .quad 0x4006b6
+                </code></pre>
+                <!-- write breakpoint on memory? -->
             </section>
             <section>
-                resolution (debug?)
-                LD_BIND_NOW and -x bindybind
-                --- note that global symbols in shared libs _still_ go through PLT (semantic interposition)
-            </section>
-            <section>
-                Practical advice
-                - `LD_DEBUG` and `LD_PRELOAD`
-                - LTO usage?
-                -
-            </section>
-            <section>
-                - linker sections (-ffunction-sections, -fdata-sections, --gc-sections?)
-                -
+                <h3>More</h3>
+                <ul>
+                    <li><code>LD_DEBUG</code></li>
+                    <li><code>LD_PRELOAD</code></li>
+                    <li><code>LD_BIND_NOW</code> (and -Wl,-znow)</li>
+                </ul>
             </section>
         </section>
-
         <section>
             <section>
                 <h3>Advanced stuff</h3>
                 <ul>
                     <li>Weak references</li>
-                    <li>LTO</li>
                     <li>ODR violations</li>
+                    <li>LTO</li>
                 </ul>
+            </section>
+            <section>
+                `-fpic` and `-fno-semantic-interposition` https://godbolt.org/z/CucbcV
+                (but not for C++ symbols): https://godbolt.org/z/7lUA6k
+                --- note that global symbols in shared libs _still_ go through PLT (semantic interposition)
+                -Bsymbolic does this in linker
             </section>
         </section>
         <section>
