@@ -47,6 +47,22 @@ linker, along with the relevant runtimes, and then loaded and executed by the op
 - Bonus: some diea how the OS loads and runs your program
 - Bonus: something linker scripts?
 
+## First run-through notes:
+- Times:
+  - 7m44 to "Sections"
+  - 9m36 to "Code arch"
+  - 11m30 to gdb
+  - 17m to second set of CE links (removed some)
+  - 20m "ECS v2" (no idea, can't read my own handwriting)
+  - 21m "Not flowing @ object files", forgot what PLT stood for
+  - 28m "Symbols" (unfinished slide), probably need to flesh out. and/or define what linker does for symbols
+  - 36m to "advanced stuff"
+  - 38m dynamic linker starts
+  - 48m did a bad explanation of the lookup (the PLT dll thing). practice
+  - 52m advanced stuff, LTO, whatever, jammed...
+  - 56m stopped waffling
+
+So, needs tidying, probably some trimming.
 
 ## Raw notes
 makefiles...build stuff
