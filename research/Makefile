@@ -74,6 +74,7 @@ $(eval $(call FOR_ALL_FLAGS,ADD_BOTH,empty))
 CFLAGS=-O0 -fPIC -g
 CXXFLAGS=-O0 -fPIC -g
 $(eval $(call FOR_ALL_FLAGS,ADD_BOTH,hello,message))
+$(eval $(call FOR_ALL_FLAGS,ADD,weak,message_str))
 $(eval $(call FOR_ALL_FLAGS,ADD,global))
 
 all: $(ALL_TARGETS)

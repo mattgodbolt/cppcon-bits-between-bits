@@ -2,9 +2,9 @@
 #include "message.h"
 
 void greet() {
-	printf("%s\n", getMessage());
+  printf("%s\n", getMessage());
 }
 
 int main() {
-	greet();
+  greet();
 }

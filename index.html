@@ -129,29 +129,6 @@
                 <pre class="fragment"><code class="bash" data-trim>
                     $ readelf -a cpp/empty</code></pre>
                 <pre class="fragment"><code data-trim class="llvm" data-snippet="empty-readelf"></code></pre>
-                <!--
-                                <pre class="fragment"><code data-trim class="llvm">ELF Header:
-                  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00
-                  Class:                             ELF64
-                ...
-                Section Headers:
-                  [Nr] Name              Type             Address           Offset
-                  [ 0]                   NULL             0000000000000000  00000000
-                  [ 1] .interp           PROGBITS         0000000000400238  00000238
-                ...
-                Relocation section '.rela.dyn' at offset 0x380 contains 2 entries:
-                  Offset Type              Sym. Value   Sym. Name + Addend
-                0600ff0  R_X86_64_GLOB_DAT 00000000     __libc_start_main@GLIBC_2.2.5 + 0
-                0600ff8  R_X86_64_GLOB_DAT 00000000     __gmon_start__ + 0
-                ...
-                Symbol table '.symtab' contains 58 entries:
-                   Num:    Value          Size Type    Bind   Vis      Ndx Name
-                ...
-                    24: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS empty.cpp
-                    25: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS crtstuff.c
-                ...
-                                </code></pre>
-                -->
             </section>
             <section>
                 <h3>The ELF file format</h3>
@@ -531,23 +508,18 @@ getMessage()@plt:
             <section>
                 <h3>Advanced stuff</h3>
                 <ul>
-                    <li>Weak references<!-- todo getMessage in header and make inline--></li>
+                    <li>Weak references<</li>
                     <li>ODR violations</li>
                     <li>LTO</li>
                 </ul>
             </section>
             <section>
-                `-fpic` and `-fno-semantic-interposition` https://godbolt.org/z/CucbcV
-                (but not for C++ symbols): https://godbolt.org/z/7lUA6k
-                --- note that global symbols in shared libs _still_ go through PLT (semantic interposition)
-                -Bsymbolic does this in linker
+                <h3>More reading</h3>
+                <ul>
+                    <li>Ian Lance Taylor's blog - https://www.airs.com/blog</li>
+                    <!-- honza's section on LTO -->
+                </ul>
             </section>
-        </section>
-        <section>
-            <h3>More reading</h3>
-            <ul>
-                <li>https://www.airs.com/blog/archives/38</li>
-            </ul>
         </section>
         <section>
             <h3>Coming soon!</h3>
@@ -561,7 +533,29 @@ getMessage()@plt:
                         <li>Me</li>
                     </ul>
                 </li>
+                <li>Topics: C++20, Modern C++, Performant C++</li>
             </ul>
+        </section>
+        <section>
+            <section>
+                <h3>Bonus slides</h3>
+            </section>
+            <section>
+                <h3>Weak references</h3>
+            </section>
+            <section>
+                <h3>Semantic interposition</h3>
+                <a href="https://godbolt.org/z/7lUA6k" target="_blank">https://godbolt.org/z/7lUA6k</a>
+                <ul>
+                    <li>global symbols in shared libs _still_ go through PLT -
+                        <a href="https://godbolt.org/z/CucbcV" target="_blank">https://godbolt.org/z/CucbcV</a>
+                    </li>
+                    <li><code>-Bsymbolic</code></li>
+                </ul>
+            </section>
+            <section>
+                <h3>LTO</h3>
+            </section>
         </section>
     </div>
 </div>
