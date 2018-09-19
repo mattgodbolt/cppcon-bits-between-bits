@@ -21,7 +21,7 @@ linker, along with the relevant runtimes, and then loaded and executed by the op
   - ld, gold
   - finding the command-line GCC/clang is using to invoke linker
   - system libraries (libc, libgcc etc)
-  - linker sections (-ffunction-sections, -fdata-sections, --gc-sections?)
+  - linker sections (`-ffunction-sections`, `-fdata-sections`, `--gc-sections`?)
   - linker scripts
 - Dynamic linking
   - rough overview
@@ -46,6 +46,29 @@ linker, along with the relevant runtimes, and then loaded and executed by the op
 - Intuition on how LTO works and how it might find new ODR violations you didn't know about.
 - Bonus: some diea how the OS loads and runs your program
 - Bonus: something linker scripts?
+
+## Second run-through notes:
+- Time worked out OK...just
+  - sections at 9m
+  - gdb session one end at 16m
+  - linker scripts at 37m
+  - 50m seconds gdb
+- still scrappy at end
+- need some cutting to make it comfortable
+- what are "aw" section flags? "a: section is allocatable w: section is writable" 
+- What am I teaching? (review!)
+  - What is the linker? What's its job and how does it achieve that.
+    - I think this is covered
+  - Dynamic linking: how it works
+    - I think this is covered
+  - Static and global initialisation is fraught with troubles. Explain and demonstrate why.
+    - I think this is covered
+  - Intuition on how LTO works and how it might find new ODR violations you didn't know about.
+    - Not covered
+  - Bonus: some diea how the OS loads and runs your program
+    - somewhat covered
+  - Bonus: something linker scripts?
+    - a little
 
 ## First run-through notes:
 - Times:

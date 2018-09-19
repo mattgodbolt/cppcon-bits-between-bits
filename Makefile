@@ -14,6 +14,8 @@ snippets: research Makefile
 	readelf --sections research/out/empty/c++/none/dynamic/empty > snippets/empty-readelf-sections
 	g++ -o /dev/null research/empty.cpp -Wl,--verbose > snippets/linker-script 2>&1
 	readelf --dynamic --program-headers research/out/hello/c++/none/dynamic-dso/hello | sed 's/0x00000000/0x/g; s|out/hello/c++/none/dynamic-dso/||g' > snippets/readelf-d-dynamic-hello
+	objdump --syms -C research/out/hello/c++/none/dynamic/hello.o | grep -v debug | sed 's/\b00000000//g' > snippets/hello-o-syms
+	objdump --syms -C research/out/hello/c++/none/dynamic/message.o | grep -v debug | sed 's/\b00000000//g' > snippets/message-o-syms
 
 clean:
 	rm -rf snippets

@@ -174,7 +174,7 @@
         <section>
             <section>
                 <h3>How we get to <code>main()</code></h3>
-                A slightly more interesting program
+                A (slightly )more interesting program
                 <pre><code data-trim>#include &lt;iostream>
 
 int i;
@@ -188,12 +188,11 @@ int main() {
   std::cout &lt;&lt; "i = " &lt;&lt; i &lt;&lt; "\n";
 }
 </code></pre>
-                <div class="fragment">What does it print?</div>
             </section>
             <section>
                 <h3>What does it print?</h3>
                 <pre><code data-trim data-noescape>
-$ g++ -Os global.cpp -o global
+$ g++ -O0 -g global.cpp -o global
 $ ./global
 <div class="fragment">i = 1</div>
                 </code></pre>
@@ -211,6 +210,9 @@ $1 = 0
 (gdb) disas
 (gdb) p i
 $2 = 1
+(gdb) break Global::Global
+(gdb) r
+(gdb) bt
 ####
                 </code></pre>
                 </aside>
@@ -254,12 +256,12 @@ int __libc_csu_init(int argc, char **argv, char **envp) {
             <section>
                 <h3>Ok but...</h3>
                 <p>
-                    Where do <code>__init_array_start</code><br>and <code>__init_array_end</code> come from?
+                    <code>__init_array_start</code>?<br><code>__init_array_end</code>?
                 </p>
                 <a class="fragment" target="_blank" href="https://godbolt.org/z/UJgjWF">https://godbolt.org/z/UJgjWF</a>
             </section>
             <section>
-                <h3>Witchcraft!</h3>
+                <h3>What's going on here?</h3>
                 <pre><code data-trim>
 .section .init_array,"aw"
 .align   8
@@ -273,22 +275,10 @@ int __libc_csu_init(int argc, char **argv, char **envp) {
                 <h3>The Linker</h3>
                 <p>What does it do?</p>
                 <ul class="fragment">
-                    <li>Resolves references between TUs</li>
-                    <li>Writes metadata (e.g. ELF headers)</li>
-                    <li>Determines the layout of an executable
-                        <ul class="fragment">
-                            <li>Collects together sections</li>
-                        </ul>
-                    </li>
+                    <li>Resolves references between <code>.o</code> files</li>
+                    <li>Determines the layout of an executable</li>
+                    <li>Writes metadata</li>
                 </ul>
-            </section>
-            <section>
-                <h3>The ELF file format (again)</h3>
-                <img src="images/Elf-layout--en.svg" height="400px">
-                <div class="attribution">
-                    By Surueña [<a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>], <a
-                        href="https://commons.wikimedia.org/wiki/File:Elf-layout--en.svg">from Wikimedia Commons</a>
-                </div>
             </section>
             <section>
                 <h3>A more representative program</h3>
@@ -344,7 +334,7 @@ message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
             </section>
             <section>
                 <h3>What's in an object file?</h3>
-                <pre class="fragment"><code class="bash" data-trim data-noescape>
+                <pre><code class="bash" data-trim data-noescape>
                     $ objdump --reloc --no-show-raw-insn -dC hello.o</code></pre>
                 <pre class="fragment"><code class="x86asm" data-snippet="hello-o-objdump-reloc"></code></pre>
             </section>
@@ -357,7 +347,15 @@ message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
             </section>
             <section>
                 <h3>Symbols</h3>
-                Show objdump --syms
+                <pre><code class="bash" data-trim data-noescape>
+                    $ objdump --syms -C hello.o</code></pre>
+                <pre class="fragment"><code class="x86asm" data-snippet="hello-o-syms"></code></pre>
+            </section>
+            <section>
+                <h3>Symbols</h3>
+                <pre><code class="bash" data-trim data-noescape>
+                    $ objdump --syms -C message.o</code></pre>
+                <pre><code class="x86asm" data-snippet="message-o-syms"></code></pre>
             </section>
             <section>
                 <h3>Linker...</h3>
@@ -450,8 +448,12 @@ message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
                 </ul>
             </section>
             <section>
-                <h3>Advanced stuff</h3>
-                - linker sections (-ffunction-sections, -fdata-sections, --gc-sections?)
+                <h3>Stuff to know</h3>
+                <ul>
+                    <li>You can write your own linker scripts</li>
+                    <li>Linker can discard unused sections: <code>-Wl,--gc-sections</code></li>
+                    <li>Compiler flags: <code>-ffunction-sections</code>, <code>-fdata-sections</code></li>
+                </ul>
             </section>
         </section>
 
@@ -484,8 +486,7 @@ $ ls -l dynamic/hello static/hello
                 </aside>
             </section>
             <section>
-                <h3>Debug v2</h3>
-                <pre><code>$ gdb </code></pre>
+                <h3>Code Archaeology - Part 2</h3>
                 <aside class="notes">
                     <pre><code>
 break main
@@ -496,25 +497,33 @@ watch *(long *)0x601018 # for poke back
                 </aside>
             </section>
             <section>
-                <pre><code data-trim>
- 0x4006a0:  pushq 0x200962(%rip)  # 0x601008
+                <pre><code data-trim data-noescape>
  0x4006a6:  jmpq  *0x200964(%rip) # 0x601010
-_Z10getMessagev@plt:
+getMessage()@plt:
+<div class="fragment highlight-current-code"> 0x4006b0:  jmpq  *0x200962(%rip) # 0x601018
+</div><div class="fragment highlight-current-code"> 0x4006b6:  pushq $0x0
+ 0x4006bb:  jmpq  0x4006a0<span class="fragment">  ; ultimately resolves symbol 0</span>
+</div>...
+ 0x601018:  .quad 0x4006b6
+                </code></pre>
+            </section>
+            <section>
+                <pre><code data-trim data-noescape>
+ 0x4006a6:  jmpq  *0x200964(%rip) # 0x601010
+getMessage()@plt:
  0x4006b0:  jmpq  *0x200962(%rip) # 0x601018
  0x4006b6:  pushq $0x0
  0x4006bb:  jmpq  0x4006a0
 ...
- 0x601010:  .quad 0x7ffff7dec750
- 0x601018:  .quad 0x4006b6
+ 0x601018:  .quad 0x7ffff7bd35d5 ; now resolved to getMessage()
                 </code></pre>
-                <!-- write breakpoint on memory? -->
             </section>
             <section>
                 <h3>More</h3>
                 <ul>
+                    <li><code>LD_BIND_NOW</code> (and -Wl,-znow)</li>
                     <li><code>LD_DEBUG</code></li>
                     <li><code>LD_PRELOAD</code></li>
-                    <li><code>LD_BIND_NOW</code> (and -Wl,-znow)</li>
                 </ul>
             </section>
         </section>
@@ -522,7 +531,7 @@ _Z10getMessagev@plt:
             <section>
                 <h3>Advanced stuff</h3>
                 <ul>
-                    <li>Weak references</li>
+                    <li>Weak references<!-- todo getMessage in header and make inline--></li>
                     <li>ODR violations</li>
                     <li>LTO</li>
                 </ul>
