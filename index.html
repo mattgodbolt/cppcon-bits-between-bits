@@ -151,7 +151,7 @@
         <section>
             <section>
                 <h3>How we get to <code>main()</code></h3>
-                A (slightly )more interesting program
+                A (slightly) more interesting program
                 <pre><code data-trim>#include &lt;iostream>
 
 int i;
@@ -209,7 +209,7 @@ $2 = 1
             </section>
             <section>
                 <h3>Where do these functions come from?</h3>
-                <a class="fragment" target="_blank" href="https://godbolt.org/z/X979VP">https://godbolt.org/z/X979VP</a>
+                <a class="fragment" target="_blank" href="https://godbolt.org/z/cppcon2018_1">https://godbolt.org/z/cppcon2018_1</a>
             </section>
             <section>
                 <h3>Who calls this function?</h3>
@@ -235,7 +235,7 @@ int __libc_csu_init(int argc, char **argv, char **envp) {
                 <p>
                     <code>__init_array_start</code>?<br><code>__init_array_end</code>?
                 </p>
-                <a class="fragment" target="_blank" href="https://godbolt.org/z/UJgjWF">https://godbolt.org/z/UJgjWF</a>
+                <a class="fragment" target="_blank" href="https://godbolt.org/z/cppcon2018_2">https://godbolt.org/z/cppcon2018_2</a>
             </section>
             <section>
                 <h3>What's going on here?</h3>
@@ -376,11 +376,7 @@ message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
                             <div class="elf-label">.text</div>
                             <div><code>greet() {}</code></div>
                             <div><code>getMessage()</code></div>
-                        </div>
-                        <div class="elf-section">
-                            <div class="elf-label">.text.init</div>
-                            <div><code>main()</code>
-                            </div>
+                            <div><code>main()</code></div>
                         </div>
                         <div class="elf-section">
                             <div class="elf-label">.ro-data</div>
@@ -508,7 +504,7 @@ getMessage()@plt:
             <section>
                 <h3>Advanced stuff</h3>
                 <ul>
-                    <li>Weak references<</li>
+                    <li>Weak references</li>
                     <li>ODR violations</li>
                     <li>LTO</li>
                 </ul>
@@ -516,24 +512,18 @@ getMessage()@plt:
             <section>
                 <h3>More reading</h3>
                 <ul>
-                    <li>Ian Lance Taylor's blog - https://www.airs.com/blog</li>
-                    <!-- honza's section on LTO -->
+                    <li>Ian Lance Taylor's blog - <a href="https://www.airs.com/blog">www.airs.com/blog</a></li>
+                    <li>Honza Hubička's blog - <a href="https://hubicka.blogspot.com/">hubicka.blogspot.com/</a></li>
                 </ul>
             </section>
         </section>
         <section>
-            <h3>Coming soon!</h3>
+            <h3>Special Training Event</h3>
             <ul>
-                <li>Summer 2019</li>
-                <li>Special 3-Day Training Event</li>
-                <li>Featuring
-                    <ul>
-                        <li>Charley Bay</li>
-                        <li>Jason Turner</li>
-                        <li>Me</li>
-                    </ul>
-                </li>
-                <li>Topics: C++20, Modern C++, Performant C++</li>
+                <li>Summer 2019 &mdash; Denver Area</li>
+                <li>Charley Bay, Jason Turner and me together for 3 days</li>
+                <li>C++20, error handling and performance</li>
+                <li>Check out <a href="https://coloradoplusplus.info">coloradoplusplus.info</a> for more info</li>
             </ul>
         </section>
         <section>
@@ -545,9 +535,9 @@ getMessage()@plt:
             </section>
             <section>
                 <h3>Semantic interposition</h3>
-                <a href="https://godbolt.org/z/7lUA6k" target="_blank">https://godbolt.org/z/7lUA6k</a>
+                <p><a href="https://godbolt.org/z/7lUA6k" target="_blank">https://godbolt.org/z/7lUA6k</a></p>
                 <ul>
-                    <li>global symbols in shared libs _still_ go through PLT -
+                    <li>global symbols in shared libs <i>still</i> go through PLT -
                         <a href="https://godbolt.org/z/CucbcV" target="_blank">https://godbolt.org/z/CucbcV</a>
                     </li>
                     <li><code>-Bsymbolic</code></li>

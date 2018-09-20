@@ -47,6 +47,10 @@ linker, along with the relevant runtimes, and then loaded and executed by the op
 - Bonus: some diea how the OS loads and runs your program
 - Bonus: something linker scripts?
 
+## Third run-through
+- _Just_ about fit in an hour.
+- Felt pretty good. Minor tweaks.
+
 ## Second run-through notes:
 - Time worked out OK...just
   - sections at 9m
