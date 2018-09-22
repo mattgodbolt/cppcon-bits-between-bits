@@ -44,8 +44,13 @@ linker, along with the relevant runtimes, and then loaded and executed by the op
 - Dynamic linking: how it works
 - Static and global initialisation is fraught with troubles. Explain and demonstrate why.
 - Intuition on how LTO works and how it might find new ODR violations you didn't know about.
-- Bonus: some diea how the OS loads and runs your program
+- Bonus: some idea how the OS loads and runs your program
 - Bonus: something linker scripts?
+
+# Work run through
+- time again a problem
+- consider dropping dynamic section. though agreed it's the cool part
+- paul notes: find a story, stick to it. use graphics. maybe cave stuff on spelunking?
 
 ## Third run-through
 - _Just_ about fit in an hour.

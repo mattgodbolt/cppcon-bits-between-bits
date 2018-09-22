@@ -263,6 +263,7 @@ int __libc_csu_init(int argc, char **argv, char **envp) {
                     <div class="w50">
                     <pre><code data-trim>
 // hello.cpp
+extern const char *getMessage();
 void greet() {
   std::cout &lt;&lt; getMessage() &lt;&lt; "\n";
 }
@@ -495,6 +496,7 @@ getMessage()@plt:
                 <h3>More</h3>
                 <ul>
                     <li><code>LD_BIND_NOW</code> (and -Wl,-znow)</li>
+                    <li><code>ldd</code></li>
                     <li><code>LD_DEBUG</code></li>
                     <li><code>LD_PRELOAD</code></li>
                 </ul>
