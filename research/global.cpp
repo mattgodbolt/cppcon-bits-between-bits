@@ -1,14 +1,18 @@
 #include <iostream>
 
-int i;
-struct Global {
-  Global() { 
-    i++; 
+struct Foo {
+  static int numFoos;
+  Foo() { 
+    numFoos++; 
+  }
+  ~Foo() { 
+    numFoos--;
   }
 };
+int Foo::numFoos;
 
-Global global;
+Foo globalFoo;
 
 int main() {
-  std::cout << "i = " << i << "\n";
+  std::cout << "numFoos = " << Foo::numFoos << "\n";
 }

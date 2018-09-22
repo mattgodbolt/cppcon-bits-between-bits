@@ -20,6 +20,11 @@
             color: #ffffff;
         }
 
+        .highlighted-already {
+            background: #555a5f;
+            color: #ffffff;
+        }
+
         .no-border {
             background: none !important;
             border: none !important;
@@ -152,19 +157,29 @@
             <section>
                 <h3>How we get to <code>main()</code></h3>
                 A (slightly) more interesting program
-                <pre><code data-trim>#include &lt;iostream>
-
-int i;
-struct Global {
-  Global() { i++; }
+                <div class="flex">
+                    <div class="w50">
+                <pre><code data-trim>struct Foo {
+  static int numFoos;
+  Foo() {
+    numFoos++;
+  }
+  ~Foo() {
+    numFoos--;
+  }
 };
-
-Global global;
+int Foo::numFoos;
+                </code></pre>
+                    </div>
+                    <div class="w50"><pre><code data-trim>Foo globalFoo;
 
 int main() {
-  std::cout &lt;&lt; "i = " &lt;&lt; i &lt;&lt; "\n";
+  std::cout &lt;&lt; "numFoos = "
+      &lt;&lt; Foo::numFoos &lt;&lt; "\n";
 }
 </code></pre>
+                    </div>
+                </div>
             </section>
             <section>
                 <h3>What does it print?</h3>
@@ -201,10 +216,10 @@ $2 = 1
             <section>
                 <h3>Call stack</h3>
                 <pre><code data-trim data-noescape>
-<div class="fragment highlight-current-code">#0  Global::Global (this=0x601050 &lt;global>) at global.cpp:6
+<div class="fragment highlight-current-code">#0  Foo::Foo (this=0x601050 &lt;global>) at global.cpp:6
 </div><div class="fragment highlight-current-code">#1  0x000000000040079d in __static_initialization_and_destruction_0 (
-    __initialize_p=1, __priority=65535) at global.cpp:10
-#2  0x00000000004007b3 in _GLOBAL__sub_I_global.cpp(void) () at global.cpp:14
+    __initialize_p=1, __priority=65535) at global.cpp:14
+#2  0x00000000004007b3 in _GLOBAL__sub_I_global.cpp(void) () at global.cpp:18
 </div><div class="fragment highlight-current-code">#3  0x000000000040082d in __libc_csu_init ()
 #4  0x00007ffff70c1b28 in __libc_start_main (main=0x400702 &lt;main()>, argc=1,
     ... at ../csu/libc-start.c:266
@@ -505,39 +520,36 @@ watch *(long *)0x601018 # for poke back
             </section>
             <section>
                 <pre><code data-trim data-noescape>
- 0x4006a6:  jmpq  *0x200964(%rip) # 0x601010
 getMessage()@plt:
-<div class="fragment highlight-current-code"> 0x4006b0:  jmpq  *0x200962(%rip) # 0x601018
-</div><div class="fragment highlight-current-code"> 0x4006b6:  pushq $0x0
- 0x4006bb:  jmpq  0x4006a0<span class="fragment">  ; ultimately resolves symbol 0</span>
+<div class="fragment highlight-current-code" data-fragment-index="1"> 0x4006b0:  jmpq  *0x200962(%rip) # 0x601018
+</div><div class="fragment highlight-current-code" data-fragment-index="3"> 0x4006b6:  pushq $0x0
+ 0x4006bb:  jmpq  0x4006a0<span class="fragment highlighted-already">  ; ultimately resolves symbol 0</span>
 </div>...
- 0x601018:  .quad 0x4006b6
+<div class="fragment highlight-current-code" data-fragment-index="2"> 0x601018:  .quad 0x4006b6</div>
                 </code></pre>
             </section>
             <section>
                 <pre><code data-trim data-noescape>
- 0x4006a6:  jmpq  *0x200964(%rip) # 0x601010
 getMessage()@plt:
  0x4006b0:  jmpq  *0x200962(%rip) # 0x601018
  0x4006b6:  pushq $0x0
  0x4006bb:  jmpq  0x4006a0
 ...
- 0x601018:  .quad 0x7ffff7bd35d5 ; now resolved to getMessage()
+<div class="highlighted-already"> 0x601018:  .quad 0x7ffff7bd35d5 ; now resolved to getMessage()</div>
                 </code></pre>
             </section>
             <section>
-                <h3>More</h3>
+                <h3>Debugging</h3>
                 <ul>
-                    <li><code>LD_BIND_NOW</code> (and -Wl,-znow)</li>
-                    <li><code>ldd</code></li>
-                    <li><code>LD_DEBUG</code></li>
+                    <li><code>LD_BIND_NOW</code> (and <code>-Wl,-znow</code>)</li>
+                    <li><code>ldd</code> and <code>LD_DEBUG</code></li>
                     <li><code>LD_PRELOAD</code></li>
                 </ul>
             </section>
         </section>
         <section>
             <section>
-                <h3>Advanced stuff</h3>
+                <h3>I wish I had more time</h3>
                 <ul>
                     <li>Weak references</li>
                     <li>ODR violations</li>
