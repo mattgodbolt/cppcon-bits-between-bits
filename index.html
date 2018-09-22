@@ -176,6 +176,10 @@ $ ./global
             </section>
             <section>
                 <h3>Code Archaeology - Part 1</h3>
+                <img src="images/stonehenge.jpeg" class="no-border stretch">
+                <div class="attribution">
+                    Matt Godbolt [<a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>]
+                </div>
                 <aside class="notes">
                 <pre><code>
 $ gdb research/out/global/c++/none/dynamic/global
@@ -216,6 +220,10 @@ $2 = 1
             </section>
             <section>
                 <h3>libc spelunking</h3>
+                <img src="images/caves.jpeg" class="no-border stretch">
+            </section>
+            <section>
+                <h3>libc spelunking</h3>
                 <pre><code data-trim data-noescape>
 // Paraphrased from glibc/csu/elf-init.c
 <div class="fragment highlight-current-code">typedef void (*init_func)(int, char **, char **);
@@ -250,8 +258,15 @@ int __libc_csu_init(int argc, char **argv, char **envp) {
         <section>
             <section>
                 <h3>The Linker</h3>
+                <img src="images/padlocks.jpeg" class="no-border stretch">
+                <div class="attribution">
+                    Matt Godbolt [<a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>]
+                </div>
+            </section>
+            <section>
+                <h3>The Linker</h3>
                 <p>What does it do?</p>
-                <ul class="fragment">
+                <ul>
                     <li>Resolves references between <code>.o</code> files</li>
                     <li>Determines the layout of an executable</li>
                     <li>Writes metadata</li>
@@ -311,10 +326,17 @@ message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
                 <pre class="fragment"><code class="x86asm" data-snippet="hello-o-objdump"></code></pre>
             </section>
             <section>
+                <h3>Relocations</h3>
+                <img src="images/relocation.jpeg" class="no-border stretch">
+                <div class="attribution">
+                    Matt Godbolt [<a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>]
+                </div>
+            </section>
+            <section>
                 <h3>What's in an object file?</h3>
                 <pre><code class="bash" data-trim data-noescape>
                     $ objdump --reloc --no-show-raw-insn -dC hello.o</code></pre>
-                <pre class="fragment"><code class="x86asm" data-snippet="hello-o-objdump-reloc"></code></pre>
+                <pre><code class="x86asm" data-snippet="hello-o-objdump-reloc"></code></pre>
             </section>
             <section>
                 <h3>Relocations</h3>
@@ -322,6 +344,13 @@ message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
                     <li>Different types</li>
                     <li>Used within same object file</li>
                 </ul>
+            </section>
+            <section>
+                <h3>Symbols</h3>
+                <img src="images/cymbals.jpeg" class="no-border stretch">
+                <div class="attribution">
+                    Matt Godbolt [<a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>]
+                </div>
             </section>
             <section>
                 <h3>Symbols</h3>
@@ -461,6 +490,10 @@ $ ls -l dynamic/hello static/hello
             </section>
             <section>
                 <h3>Code Archaeology - Part 2</h3>
+                <img src="images/henge2.jpeg" class="no-border stretch">
+                <div class="attribution">
+                    Matt Godbolt [<a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>]
+                </div>
                 <aside class="notes">
                     <pre><code>
 break main
