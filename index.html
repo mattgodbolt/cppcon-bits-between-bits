@@ -108,7 +108,14 @@
             <h6>CppCon 2018</h6>
         </section>
         <section>
-            <!-- GCC 8.1 -->
+            <img src="images/bitsbetween.webp" class="no-border stretch">
+            <p class="fragment"><em>"Good, but non-essential"</em> &mdash;
+                <a href="http://www.progarchives.com/album.asp?id=1051" target="_blank">progarchives.com</a>
+            <div class="attribution">
+                &copy; <a href="https://www.ozrics.com/" target="_blank">Ozric Tentacles</a>, used under Fair Use.
+            </div>
+        </section>
+        <section>
             <section>
                 <h3>A program</h3>
                 <pre><code class="cpp" data-trim>
@@ -131,7 +138,7 @@
             </section>
             <section>
                 <h3>What's in it?</h3>
-                <pre class="fragment"><code class="bash" data-trim>
+                <pre><code class="bash" data-trim>
                     $ readelf -a cpp/empty</code></pre>
                 <pre class="fragment"><code data-trim class="llvm" data-snippet="empty-readelf"></code></pre>
             </section>
@@ -186,7 +193,7 @@ int main() {
                 <pre><code data-trim data-noescape>
 $ g++ -O0 -g global.cpp -o global
 $ ./global
-<div class="fragment">i = 1</div>
+<div class="fragment">numFoos = 1</div>
                 </code></pre>
             </section>
             <section>
@@ -223,7 +230,7 @@ $2 = 1
 </div><div class="fragment highlight-current-code">#3  0x000000000040082d in __libc_csu_init ()
 #4  0x00007ffff70c1b28 in __libc_start_main (main=0x400702 &lt;main()>, argc=1,
     ... at ../csu/libc-start.c:266
-</div>#5  0x000000000040064a in _start ()
+</div><div class="fragment highlight-current-code">#5  0x000000000040064a in _start ()</div>
                 </code></pre>
             </section>
             <section>
@@ -232,6 +239,15 @@ $2 = 1
             </section>
             <section>
                 <h3>Who calls this function?</h3>
+                <div class="fragment">
+                    <img src="images/google.svg" class="no-border stretch">
+                    <div class="attribution">
+                        By Google Inc. -
+                        <a rel="nofollow" class="external free"
+                           href="https://chromium.googlesource.com/chromium/src/+/master/ui/webui/resources/images/google_logo.svg">https://chromium.googlesource.com/chromium/src/+/master/ui/webui/resources/images/google_logo.svg</a>,
+                        Public Domain, <a href="https://commons.wikimedia.org/w/index.php?curid=42827827">Link</a>
+                    </div>
+                </div>
             </section>
             <section>
                 <h3>libc spelunking</h3>
@@ -336,7 +352,7 @@ message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
             </section>
             <section>
                 <h3>What's in an object file?</h3>
-                <pre class="fragment"><code class="bash" data-trim data-noescape>
+                <pre><code class="bash" data-trim data-noescape>
                     $ objdump -dC hello.o</code></pre>
                 <pre class="fragment"><code class="x86asm" data-snippet="hello-o-objdump"></code></pre>
             </section>
@@ -350,7 +366,7 @@ message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
             <section>
                 <h3>What's in an object file?</h3>
                 <pre><code class="bash" data-trim data-noescape>
-                    $ objdump --reloc --no-show-raw-insn -dC hello.o</code></pre>
+                    $ objdump --reloc -dC hello.o</code></pre>
                 <pre><code class="x86asm" data-snippet="hello-o-objdump-reloc"></code></pre>
             </section>
             <section>
