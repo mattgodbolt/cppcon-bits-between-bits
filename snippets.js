@@ -20,7 +20,7 @@
         function expandTabs(line, size) {
             let extraChars = 0;
             const padding = (() => {
-                let res = ""
+                let res = "";
                 for (let i = 0; i < size; ++i) res += " ";
                 return res;
             })();
@@ -32,10 +32,11 @@
             });
         }
 
-        function postProcess(text) {
-            const MaxLength = 1000;
+        function postProcess(text, highlight) {
+            highlight = new RegExp(highlight ? highlight : "^this should not match anything$^");
             let lastBlank = true;
             return text
+                .replace(/</g, "&lt;").replace(/>/g, "&gt;")
                 .split("\n")
                 .filter(x => {
                     const thisBlank = x.trim() === "";
@@ -44,16 +45,20 @@
                     return !shouldSkip;
                 })
                 .map(x => expandTabs(x, 2))
-                .map(x => x.length >= MaxLength ? x.substr(0, MaxLength - 3) + "..." : x)
-                .join("\n")
-                .replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                .map(x => {
+                    if (highlight.test(x))
+                        return "<span class=\"highlighted-already\">" + x + "</span>";
+                    else
+                        return x;
+                })
+                .join("\n");
         }
 
         for (let element of document.querySelectorAll('pre code')) {
             if (element.hasAttribute('data-snippet')) {
                 xhrGet("snippets/" + element.getAttribute('data-snippet'))
                     .then((res) => {
-                        element.innerHTML = postProcess(res);
+                        element.innerHTML = postProcess(res, element.getAttribute('data-snippet-highlight'));
                         if (typeof(window.hljs) === "function") {
                             window.hljs.highlightBlock(element);
                         }
