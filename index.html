@@ -281,7 +281,7 @@ int __libc_csu_init(int argc, char **argv, char **envp) {
                 <pre><code data-trim>
 .section .init_array,"aw"
 .align   8
-.quad    _GLOBAL__sub_I_i
+.quad    _GLOBAL__sub_I_Foo::numFoos
 .text
                 </code></pre>
             </section>
