@@ -354,7 +354,8 @@ message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
                 <h3>What's in an object file?</h3>
                 <pre><code class="bash" data-trim data-noescape>
                     $ objdump -dC hello.o</code></pre>
-                <pre class="fragment"><code data-noescape class="x86asm" data-snippet="hello-o-objdump" data-snippet-highlight="callq"></code></pre>
+                <pre class="fragment"><code data-noescape class="x86asm" data-snippet="hello-o-objdump"
+                                            data-snippet-highlight="callq"></code></pre>
             </section>
             <section>
                 <h3>Relocations</h3>
@@ -367,7 +368,8 @@ message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
                 <h3>What's in an object file?</h3>
                 <pre><code class="bash" data-trim data-noescape>
                     $ objdump --reloc -dC hello.o</code></pre>
-                <pre><code class="x86asm" data-noescape data-snippet="hello-o-objdump-reloc" data-snippet-highlight="R_X86"></code></pre>
+                <pre><code class="x86asm" data-noescape data-snippet="hello-o-objdump-reloc"
+                           data-snippet-highlight="R_X86"></code></pre>
             </section>
             <section>
                 <h3>Relocations</h3>
@@ -387,13 +389,15 @@ message.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
                 <h3>Symbols</h3>
                 <pre><code class="bash" data-trim data-noescape>
                     $ objdump --syms -C hello.o</code></pre>
-                <pre class="fragment"><code class="x86asm" data-snippet="hello-o-syms" data-snippet-highlight=" F " data-noescape></code></pre>
+                <pre class="fragment"><code class="x86asm" data-snippet="hello-o-syms" data-snippet-highlight=" F "
+                                            data-noescape></code></pre>
             </section>
             <section>
                 <h3>Symbols</h3>
                 <pre><code class="bash" data-trim data-noescape>
                     $ objdump --syms -C message.o</code></pre>
-                <pre><code class="x86asm" data-snippet="message-o-syms" data-snippet-highlight=" F " data-noescape></code></pre>
+                <pre><code class="x86asm" data-snippet="message-o-syms" data-snippet-highlight=" F "
+                           data-noescape></code></pre>
             </section>
             <section>
                 <h3>Linker...</h3>
@@ -586,29 +590,10 @@ getMessage()@plt:
                 <li>Summer 2019 &mdash; Denver Area</li>
                 <li>Charley Bay, Jason Turner and me together for 3 days</li>
                 <li>C++20, error handling and performance</li>
-                <li>Check out <a href="https://coloradoplusplus.info" target="_blank">coloradoplusplus.info</a> for more info</li>
+                <li>Check out <a href="https://coloradoplusplus.info" target="_blank">coloradoplusplus.info</a> for more
+                    info
+                </li>
             </ul>
-        </section>
-        <section>
-            <section>
-                <h3>Bonus slides</h3>
-            </section>
-            <section>
-                <h3>Weak references</h3>
-            </section>
-            <section>
-                <h3>Semantic interposition</h3>
-                <p><a href="https://godbolt.org/z/7lUA6k" target="_blank">https://godbolt.org/z/7lUA6k</a></p>
-                <ul>
-                    <li>global symbols in shared libs <i>still</i> go through PLT -
-                        <a href="https://godbolt.org/z/CucbcV" target="_blank">https://godbolt.org/z/CucbcV</a>
-                    </li>
-                    <li><code>-Bsymbolic</code></li>
-                </ul>
-            </section>
-            <section>
-                <h3>LTO</h3>
-            </section>
         </section>
     </div>
 </div>
