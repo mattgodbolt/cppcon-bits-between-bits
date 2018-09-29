@@ -1,0 +1,58 @@
+
+research/out/hello/c++/none/dynamic/hello.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <greet()>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	e8 00 00 00 00       	callq  9 <greet()+0x9>
+   9:	48 89 c6             	mov    %rax,%rsi
+   c:	48 8b 05 00 00 00 00 	mov    0x0(%rip),%rax        # 13 <greet()+0x13>
+  13:	48 89 c7             	mov    %rax,%rdi
+  16:	e8 00 00 00 00       	callq  1b <greet()+0x1b>
+  1b:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 22 <greet()+0x22>
+  22:	48 89 c7             	mov    %rax,%rdi
+  25:	e8 00 00 00 00       	callq  2a <greet()+0x2a>
+  2a:	90                   	nop
+  2b:	5d                   	pop    %rbp
+  2c:	c3                   	retq   
+
+000000000000002d <main>:
+  2d:	55                   	push   %rbp
+  2e:	48 89 e5             	mov    %rsp,%rbp
+  31:	e8 00 00 00 00       	callq  36 <main+0x9>
+  36:	b8 00 00 00 00       	mov    $0x0,%eax
+  3b:	5d                   	pop    %rbp
+  3c:	c3                   	retq   
+
+000000000000003d <__static_initialization_and_destruction_0(int, int)>:
+  3d:	55                   	push   %rbp
+  3e:	48 89 e5             	mov    %rsp,%rbp
+  41:	48 83 ec 10          	sub    $0x10,%rsp
+  45:	89 7d fc             	mov    %edi,-0x4(%rbp)
+  48:	89 75 f8             	mov    %esi,-0x8(%rbp)
+  4b:	83 7d fc 01          	cmpl   $0x1,-0x4(%rbp)
+  4f:	75 32                	jne    83 <__static_initialization_and_destruction_0(int, int)+0x46>
+  51:	81 7d f8 ff ff 00 00 	cmpl   $0xffff,-0x8(%rbp)
+  58:	75 29                	jne    83 <__static_initialization_and_destruction_0(int, int)+0x46>
+  5a:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 61 <__static_initialization_and_destruction_0(int, int)+0x24>
+  61:	e8 00 00 00 00       	callq  66 <__static_initialization_and_destruction_0(int, int)+0x29>
+  66:	48 8d 15 00 00 00 00 	lea    0x0(%rip),%rdx        # 6d <__static_initialization_and_destruction_0(int, int)+0x30>
+  6d:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 74 <__static_initialization_and_destruction_0(int, int)+0x37>
+  74:	48 8b 05 00 00 00 00 	mov    0x0(%rip),%rax        # 7b <__static_initialization_and_destruction_0(int, int)+0x3e>
+  7b:	48 89 c7             	mov    %rax,%rdi
+  7e:	e8 00 00 00 00       	callq  83 <__static_initialization_and_destruction_0(int, int)+0x46>
+  83:	90                   	nop
+  84:	c9                   	leaveq 
+  85:	c3                   	retq   
+
+0000000000000086 <_GLOBAL__sub_I_hello.cpp>:
+  86:	55                   	push   %rbp
+  87:	48 89 e5             	mov    %rsp,%rbp
+  8a:	be ff ff 00 00       	mov    $0xffff,%esi
+  8f:	bf 01 00 00 00       	mov    $0x1,%edi
+  94:	e8 a4 ff ff ff       	callq  3d <__static_initialization_and_destruction_0(int, int)>
+  99:	5d                   	pop    %rbp
+  9a:	c3                   	retq   

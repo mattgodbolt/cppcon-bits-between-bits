@@ -1,0 +1,141 @@
+
+research/out/empty/c++/none/dynamic/empty:     file format elf64-x86-64
+
+
+Disassembly of section .init:
+
+00000000004003b0 <_init>:
+  4003b0:	sub    $0x8,%rsp
+  4003b4:	mov    0x200c3d(%rip),%rax        # 600ff8 <__gmon_start__>
+  4003bb:	test   %rax,%rax
+  4003be:	je     4003c2 <_init+0x12>
+  4003c0:	callq  *%rax
+  4003c2:	add    $0x8,%rsp
+  4003c6:	retq   
+
+Disassembly of section .text:
+
+00000000004003d0 <main>:
+  4003d0:	xor    %eax,%eax
+  4003d2:	retq   
+  4003d3:	nopw   %cs:0x0(%rax,%rax,1)
+  4003dd:	nopl   (%rax)
+
+00000000004003e0 <_start>:
+  4003e0:	xor    %ebp,%ebp
+  4003e2:	mov    %rdx,%r9
+  4003e5:	pop    %rsi
+  4003e6:	mov    %rsp,%rdx
+  4003e9:	and    $0xfffffffffffffff0,%rsp
+  4003ed:	push   %rax
+  4003ee:	push   %rsp
+  4003ef:	mov    $0x400540,%r8
+  4003f6:	mov    $0x4004d0,%rcx
+  4003fd:	mov    $0x4003d0,%rdi
+  400404:	callq  *0x200be6(%rip)        # 600ff0 <__libc_start_main@GLIBC_2.2.5>
+  40040a:	hlt    
+  40040b:	nopl   0x0(%rax,%rax,1)
+
+0000000000400410 <_dl_relocate_static_pie>:
+  400410:	repz retq 
+  400412:	nopw   %cs:0x0(%rax,%rax,1)
+  40041c:	nopl   0x0(%rax)
+
+0000000000400420 <deregister_tm_clones>:
+  400420:	mov    $0x601028,%eax
+  400425:	cmp    $0x601028,%rax
+  40042b:	je     400440 <deregister_tm_clones+0x20>
+  40042d:	mov    $0x0,%eax
+  400432:	test   %rax,%rax
+  400435:	je     400440 <deregister_tm_clones+0x20>
+  400437:	mov    $0x601028,%edi
+  40043c:	jmpq   *%rax
+  40043e:	xchg   %ax,%ax
+  400440:	retq   
+  400441:	nopl   0x0(%rax,%rax,1)
+  400446:	nopw   %cs:0x0(%rax,%rax,1)
+
+0000000000400450 <register_tm_clones>:
+  400450:	mov    $0x601028,%esi
+  400455:	sub    $0x601028,%rsi
+  40045c:	sar    $0x3,%rsi
+  400460:	mov    %rsi,%rax
+  400463:	shr    $0x3f,%rax
+  400467:	add    %rax,%rsi
+  40046a:	sar    %rsi
+  40046d:	je     400480 <register_tm_clones+0x30>
+  40046f:	mov    $0x0,%eax
+  400474:	test   %rax,%rax
+  400477:	je     400480 <register_tm_clones+0x30>
+  400479:	mov    $0x601028,%edi
+  40047e:	jmpq   *%rax
+  400480:	retq   
+  400481:	nopl   0x0(%rax,%rax,1)
+  400486:	nopw   %cs:0x0(%rax,%rax,1)
+
+0000000000400490 <__do_global_dtors_aux>:
+  400490:	cmpb   $0x0,0x200b91(%rip)        # 601028 <__TMC_END__>
+  400497:	jne    4004b0 <__do_global_dtors_aux+0x20>
+  400499:	push   %rbp
+  40049a:	mov    %rsp,%rbp
+  40049d:	callq  400420 <deregister_tm_clones>
+  4004a2:	movb   $0x1,0x200b7f(%rip)        # 601028 <__TMC_END__>
+  4004a9:	pop    %rbp
+  4004aa:	retq   
+  4004ab:	nopl   0x0(%rax,%rax,1)
+  4004b0:	retq   
+  4004b1:	nopl   0x0(%rax,%rax,1)
+  4004b6:	nopw   %cs:0x0(%rax,%rax,1)
+
+00000000004004c0 <frame_dummy>:
+  4004c0:	jmp    400450 <register_tm_clones>
+  4004c2:	nopw   %cs:0x0(%rax,%rax,1)
+  4004cc:	nopl   0x0(%rax)
+
+00000000004004d0 <__libc_csu_init>:
+  4004d0:	push   %r15
+  4004d2:	push   %r14
+  4004d4:	mov    %rdx,%r15
+  4004d7:	push   %r13
+  4004d9:	push   %r12
+  4004db:	lea    0x20093e(%rip),%r12        # 600e20 <__frame_dummy_init_array_entry>
+  4004e2:	push   %rbp
+  4004e3:	lea    0x20093e(%rip),%rbp        # 600e28 <__init_array_end>
+  4004ea:	push   %rbx
+  4004eb:	mov    %edi,%r13d
+  4004ee:	mov    %rsi,%r14
+  4004f1:	sub    %r12,%rbp
+  4004f4:	sub    $0x8,%rsp
+  4004f8:	sar    $0x3,%rbp
+  4004fc:	callq  4003b0 <_init>
+  400501:	test   %rbp,%rbp
+  400504:	je     400526 <__libc_csu_init+0x56>
+  400506:	xor    %ebx,%ebx
+  400508:	nopl   0x0(%rax,%rax,1)
+  400510:	mov    %r15,%rdx
+  400513:	mov    %r14,%rsi
+  400516:	mov    %r13d,%edi
+  400519:	callq  *(%r12,%rbx,8)
+  40051d:	add    $0x1,%rbx
+  400521:	cmp    %rbx,%rbp
+  400524:	jne    400510 <__libc_csu_init+0x40>
+  400526:	add    $0x8,%rsp
+  40052a:	pop    %rbx
+  40052b:	pop    %rbp
+  40052c:	pop    %r12
+  40052e:	pop    %r13
+  400530:	pop    %r14
+  400532:	pop    %r15
+  400534:	retq   
+  400535:	nop
+  400536:	nopw   %cs:0x0(%rax,%rax,1)
+
+0000000000400540 <__libc_csu_fini>:
+  400540:	repz retq 
+
+Disassembly of section .fini:
+
+0000000000400544 <_fini>:
+  400544:	sub    $0x8,%rsp
+  400548:	add    $0x8,%rsp
+  40054c:	retq   

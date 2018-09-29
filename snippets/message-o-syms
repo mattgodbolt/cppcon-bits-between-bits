@@ -1,0 +1,15 @@
+
+research/out/hello/c++/none/dynamic/message.o:     file format elf64-x86-64
+
+SYMBOL TABLE:
+00000000 l    df *ABS*	00000000 message.cpp
+00000000 l    d  .text	00000000 .text
+00000000 l    d  .data	00000000 .data
+00000000 l    d  .bss	00000000 .bss
+00000000 l    d  .rodata	00000000 .rodata
+00000000 l    d  .note.GNU-stack	00000000 .note.GNU-stack
+00000000 l    d  .eh_frame	00000000 .eh_frame
+00000000 l    d  .comment	00000000 .comment
+00000000 g     F .text	00000008 getMessage()
+
+

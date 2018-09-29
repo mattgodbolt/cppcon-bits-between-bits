@@ -1,0 +1,29 @@
+
+research/out/hello/c++/none/dynamic/hello.o:     file format elf64-x86-64
+
+SYMBOL TABLE:
+00000000 l    df *ABS*	00000000 hello.cpp
+00000000 l    d  .text	00000000 .text
+00000000 l    d  .data	00000000 .data
+00000000 l    d  .bss	00000000 .bss
+00000000 l    d  .rodata	00000000 .rodata
+00000000 l     O .rodata	00000001 std::piecewise_construct
+00000000 l     O .bss	00000001 std::__ioinit
+0000003d l     F .text	00000049 __static_initialization_and_destruction_0(int, int)
+00000086 l     F .text	00000015 _GLOBAL__sub_I_hello.cpp
+00000000 l    d  .init_array	00000000 .init_array
+00000000 l    d  .note.GNU-stack	00000000 .note.GNU-stack
+00000000 l    d  .eh_frame	00000000 .eh_frame
+00000000 l    d  .comment	00000000 .comment
+00000000 g     F .text	0000002d greet()
+00000000         *UND*	00000000 _GLOBAL_OFFSET_TABLE_
+00000000         *UND*	00000000 getMessage()
+00000000         *UND*	00000000 std::cout
+00000000         *UND*	00000000 std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)
+0000002d g     F .text	00000010 main
+00000000         *UND*	00000000 std::ios_base::Init::Init()
+00000000         *UND*	00000000 .hidden __dso_handle
+00000000         *UND*	00000000 std::ios_base::Init::~Init()
+00000000         *UND*	00000000 __cxa_atexit
+
+
